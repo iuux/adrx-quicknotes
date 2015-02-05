@@ -9,7 +9,7 @@ function task() {
     })
     //.transform('uglifyify')
     .bundle()
-    .pipe(source('bundle.js'))
+    .pipe(source('bundle.js'));
 }
 
 gulp.task('browserify', task);
