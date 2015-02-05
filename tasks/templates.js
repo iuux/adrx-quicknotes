@@ -15,8 +15,6 @@ function task() {
     .pipe(templateCache({
       module: moduleName
     }))
-    .pipe(concat('scripts.js'))
-    .pipe(gulp.dest('./build'))
     .pipe(browserSync.reload({
       stream: true
     }));
