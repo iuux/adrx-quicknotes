@@ -1,2 +1,19 @@
-# adrx-quicknotes
-Quick Notes functionality for AdRx written in AngularJS.
+# AdRx Quick Notes
+
+Quick Notes functionality for Indiana University AdRx (Advising Records) system.
+
+## Installation
+
+Clone and navigate to the repo. Then install npm packages.
+
+```
+npm install
+```
+
+## Developing
+
+Run the development environment through the default [gulp](http://gulpjs.com/) task.
+
+```
+gulp
+```
