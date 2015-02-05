@@ -1,0 +1,19 @@
+{
+  "name": "adrx-quicknotes",
+  "version": "1.0.0",
+  "description": "Quick Notes functionality for AdRx.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iuux/adrx-quicknotes.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/iuux/adrx-quicknotes/issues"
+  },
+  "homepage": "https://github.com/iuux/adrx-quicknotes"
+}
