@@ -1,5 +1,6 @@
 var gulp = require('gulp');
+var runSequence = require('run-sequence');
 
-gulp.task('default', function() {
-  console.log('hi, world');
+gulp.task('default', function(callback) {
+  runSequence('clean', 'build', 'browser-sync', 'watch', callback);
 });

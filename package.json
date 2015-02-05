@@ -17,7 +17,10 @@
   },
   "homepage": "https://github.com/iuux/adrx-quicknotes",
   "devDependencies": {
+    "browser-sync": "^2.0.0-rc7",
+    "del": "^1.1.1",
     "gulp": "^3.8.10",
-    "require-directory": "^2.0.0"
+    "require-directory": "^2.0.0",
+    "run-sequence": "^1.0.2"
   }
 }
