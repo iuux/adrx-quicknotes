@@ -1,4 +1,5 @@
 'use strict';
 
-module.exports = function() {
+module.exports = function(categorizedNotesService) {
+  this.notes = categorizedNotesService;
 };

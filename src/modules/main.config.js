@@ -15,7 +15,8 @@ module.exports = function($stateProvider, $urlRouterProvider) {
     .state('app', {
       url: '/',
       templateUrl: 'app.html',
-      controller: require('./app.ctrl')
+      controller: require('./app.ctrl'),
+      controllerAs: 'app'
     })
     .state('app.note', {
       abstract: true,
@@ -28,7 +29,7 @@ module.exports = function($stateProvider, $urlRouterProvider) {
       controller: require('./note/new.ctrl')
     })
     .state('app.note.edit', {
-      url: '/edit',
+      url: '/edit/:id',
       templateUrl: 'note/edit.html',
       controller: require('./note/edit.ctrl')
     });

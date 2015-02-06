@@ -5,6 +5,23 @@
   </header>
   <div>
     <nav>
+      <div ng-repeat="category in app.notes.categorized | orderBy:'name'">
+        <div>
+          <h2>{{category.name}}</h2>
+          <a>Edit</a>
+        </div>
+        <div ng-repeat="note in category.notes | orderBy:'title'">
+          <a ui-sref="app.note.edit({id: note.id})">{{note.title}}</a>
+        </div>
+      </div>
+      <div ng-if="app.notes.uncategorized.notes.length">
+        <div>
+          <h2>{{app.notes.uncategorized.name}}</h2>
+        </div>
+        <div ng-repeat="note in app.notes.uncategorized.notes | orderBy:'title'">
+          <a ui-sref="app.note.edit({id: note.id})">{{note.title}}</a>
+        </div>
+      </div>
     <nav>
     <div ui-view></div>
   </div>
