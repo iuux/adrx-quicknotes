@@ -11,7 +11,7 @@
           <a>Edit</a>
         </div>
         <div ng-repeat="note in category.notes | orderBy:'title'">
-          <a ui-sref="app.note.edit({id: note.id})">{{note.title}}</a>
+          <a ui-sref="app.note.edit({id: note.id})" ui-sref-active="--active">{{note.title}}</a>
         </div>
       </div>
       <div ng-if="app.notes.uncategorized.notes.length">
@@ -19,7 +19,7 @@
           <h2>{{app.notes.uncategorized.name}}</h2>
         </div>
         <div ng-repeat="note in app.notes.uncategorized.notes | orderBy:'title'">
-          <a ui-sref="app.note.edit({id: note.id})">{{note.title}}</a>
+          <a ui-sref="app.note.edit({id: note.id})" ui-sref-active="--active">{{note.title}}</a>
         </div>
       </div>
     <nav>
