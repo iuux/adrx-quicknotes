@@ -8,6 +8,7 @@ angular.module(moduleName, [
   .config(require('./main.config'))
   .run(require('./main.run'))
   // Services
+  .factory('categoryService', require('./services/category.factory'))
   .factory('categoriesService', require('./services/categories.factory'))
   .factory('categorizedNotesService', require('./services/categorized-notes.factory'))
   .factory('noteService', require('./services/note.factory'))

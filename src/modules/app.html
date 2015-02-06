@@ -8,7 +8,7 @@
       <div class="qn-Nav-section" ng-repeat="category in app.notes.categorized | orderBy:'name'">
         <div class="qn-Nav-sectionHeader">
           <h2 class="qn-Nav-heading">{{category.name}}</h2>
-          <a>Edit</a>
+          <a ui-sref="app.category.edit({id: category.id})" ui-sref-active="qn-Nav-item--active">Edit</a>
         </div>
         <div ng-repeat="note in category.notes | orderBy:'title'">
           <a class="qn-Nav-item" ui-sref="app.note.edit({id: note.id})" ui-sref-active="qn-Nav-item--active">{{note.title}}</a>
