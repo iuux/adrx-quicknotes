@@ -1,4 +1,12 @@
 .qn-ActionBar {
-  padding: 1em;
-  text-align: right;
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 1em;
+
+  &-item {
+
+    & + & {
+      margin-left: 0.5em;
+    }
+  }
 }

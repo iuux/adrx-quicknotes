@@ -1,18 +1,16 @@
-<section class="qn-Content">
+<form class="qn-Content">
   <h2 class="qn-Content-heading">Edit Quick Note</h2>
-  <form>
-    <label class="qn-Label" for="qn-Input">Title</label>
-    <input class="qn-Input" id="qn-Input" ng-model="editCtrl.note.title"/>
-    <label class="qn-Label" for="qn-Category">Category</label>
-    <select id="qn-Category">
-      <option>One</option>
-      <option>Two</option>
-    </select>
-    <label class="qn-Label" for="qn-Note">Note</label>
-    <textarea class="qn-Input" id="qn-Note" ng-model="editCtrl.note.note"></textarea>
-    <div class="qn-ActionBar">
-      <button class="qn-Button">Save</button>
-      <button class="qn-Button">Cancel</button>
-    </div>
-  </form>
-</section>
+  <label class="qn-Label" for="qn-Input">Title</label>
+  <input class="qn-Input" id="qn-Input" ng-model="editCtrl.note.title"/>
+  <label class="qn-Label" for="qn-Category">Category</label>
+  <select id="qn-Category">
+    <option>One</option>
+    <option>Two</option>
+  </select>
+  <label class="qn-Label" for="qn-Note">Note</label>
+  <textarea class="qn-Input qn-Input--textarea" id="qn-Note" ng-model="editCtrl.note.note"></textarea>
+  <div class="qn-ActionBar">
+    <button class="qn-ActionBar-item qn-Button">Save</button>
+    <button class="qn-ActionBar-item qn-Button">Cancel</button>
+  </div>
+</form>
