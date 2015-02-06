@@ -3,26 +3,26 @@
     <h1 class="qn-Header-heading"><a ui-sref="app">Quick Notes</a></h1>
     <a class="qn-Button" ui-sref="app.note.new">New Quick Note</a>
   </header>
-  <div>
-    <nav>
-      <div ng-repeat="category in app.notes.categorized | orderBy:'name'">
-        <div>
-          <h2>{{category.name}}</h2>
+  <div class="qn-App-body">
+    <nav class="qn-App-nav qn-Nav">
+      <div class="qn-Nav-section" ng-repeat="category in app.notes.categorized | orderBy:'name'">
+        <div class="qn-Nav-sectionHeader">
+          <h2 class="qn-Nav-heading">{{category.name}}</h2>
           <a>Edit</a>
         </div>
         <div ng-repeat="note in category.notes | orderBy:'title'">
-          <a ui-sref="app.note.edit({id: note.id})" ui-sref-active="--active">{{note.title}}</a>
+          <a class="qn-Nav-item" ui-sref="app.note.edit({id: note.id})" ui-sref-active="qn-Nav-item--active">{{note.title}}</a>
         </div>
       </div>
-      <div ng-if="app.notes.uncategorized.notes.length">
-        <div>
-          <h2>{{app.notes.uncategorized.name}}</h2>
+      <div class="qn-Nav-section" ng-if="app.notes.uncategorized.notes.length">
+        <div class="qn-Nav-sectionHeader">
+          <h2 class="qn-Nav-heading qn-Nav-heading--unspecified">{{app.notes.uncategorized.name}}</h2>
         </div>
         <div ng-repeat="note in app.notes.uncategorized.notes | orderBy:'title'">
-          <a ui-sref="app.note.edit({id: note.id})" ui-sref-active="--active">{{note.title}}</a>
+          <a class="qn-Nav-item" ui-sref="app.note.edit({id: note.id})" ui-sref-active="qn-Nav-item--active">{{note.title}}</a>
         </div>
       </div>
-    <nav>
-    <div ui-view></div>
+    </nav>
+    <div class="qn-App-content" ui-view></div>
   </div>
 </section>

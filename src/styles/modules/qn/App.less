@@ -1,3 +1,17 @@
 .qn-App {
   border: 0.1em solid @color-Border;
+
+  &-body {
+    display: flex;
+  }
+
+  &-nav {
+    min-width: 12em;
+  }
+
+  &-content {
+    border-left: 0.1em solid @color-Border;
+    flex: 1;
+    max-width: 40em;
+  }
 }

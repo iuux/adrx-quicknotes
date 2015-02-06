@@ -1,0 +1,33 @@
+.qn-Nav {
+
+  &-section {
+  }
+
+  &-sectionHeader {
+    display: flex;
+    padding: 1em 1em 0.5em;
+  }
+
+  &-heading {
+    flex: 1;
+    font-size: 1em;
+    margin: 0;
+    padding: 0;
+
+    &--unspecified {
+      font-style: italic;
+    }
+  }
+
+  &-item {
+    color: @color-Text--900;
+    display: block;
+    padding: 0.5em 1em;
+    text-decoration: none;
+
+    &:hover,
+    &--active {
+      background-color: @color-Interactive--100;
+    }
+  }
+}
