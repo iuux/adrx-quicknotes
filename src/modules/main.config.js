@@ -13,9 +13,23 @@ module.exports = function($stateProvider, $urlRouterProvider) {
   //
   $stateProvider
     .state('app', {
-      //abstract: true,
       url: '/',
       templateUrl: 'app.html',
       controller: require('./app.ctrl')
+    })
+    .state('app.note', {
+      abstract: true,
+      url: 'note',
+      template: '<div ui-view></div>'
+    })
+    .state('app.note.new', {
+      url: '/new',
+      templateUrl: 'note/new.html',
+      controller: require('./note/new.ctrl')
+    })
+    .state('app.note.edit', {
+      url: '/edit',
+      templateUrl: 'note/edit.html',
+      controller: require('./note/edit.ctrl')
     });
 };
