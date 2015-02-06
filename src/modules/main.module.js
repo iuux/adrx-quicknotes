@@ -10,6 +10,6 @@ angular.module(moduleName, [
   // Services
   .factory('categoryService', require('./services/category.factory'))
   .factory('categoriesService', require('./services/categories.factory'))
-  .factory('categorizedNotesService', require('./services/categorized-notes.factory'))
+  .service('categorizedNotesService', require('./services/categorized-notes.factory'))
   .factory('noteService', require('./services/note.factory'))
   .factory('notesService', require('./services/notes.factory'));

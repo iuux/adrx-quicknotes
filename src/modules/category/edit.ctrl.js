@@ -8,4 +8,10 @@ module.exports = function($stateParams, $state, categoryService) {
   this.cancel = function() {
     $state.transitionTo('app');
   };
+
+  this.submit = function() {
+    console.log('renaming', category.name, 'to', this.category.name);
+    categoryService.rename(id, this.category.name);
+    this.cancel();
+  };
 };
