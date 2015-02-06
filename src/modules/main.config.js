@@ -31,6 +31,7 @@ module.exports = function($stateProvider, $urlRouterProvider) {
     .state('app.note.edit', {
       url: '/edit/:id',
       templateUrl: 'note/edit.html',
-      controller: require('./note/edit.ctrl')
+      controller: require('./note/edit.ctrl'),
+      controllerAs: 'editCtrl'
     });
 };
