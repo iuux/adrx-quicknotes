@@ -18,7 +18,7 @@ var NewNote = React.createClass({
           <label className="qn-Label" htmlFor="qn-Note">Note</label>
           <textarea className="qn-Input qn-Input--textarea" id="qn-Note"></textarea>
           <div className="qn-ActionBar">
-            <button className="qn-ActionBar-item qn-Button">Create Quick Note</button>
+            <button className="qn-ActionBar-item qn-Button">Save</button>
             <button className="qn-ActionBar-item qn-Button">Cancel</button>
           </div>
         </form>
