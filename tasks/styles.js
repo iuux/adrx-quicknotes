@@ -2,6 +2,7 @@ var gulp = require('gulp');
 var less = require('gulp-less');
 var prefix = require('gulp-autoprefixer');
 var concat = require('gulp-concat');
+var gzip = require('gulp-gzip');
 var browserSync = require('browser-sync');
 
 gulp.task('styles', function() {
@@ -18,5 +19,7 @@ gulp.task('styles', function() {
     .pipe(gulp.dest('./build'))
     .pipe(browserSync.reload({
       stream: true
-    }));
+    }))
+    .pipe(gzip())
+    .pipe(gulp.dest('./build'));
 });
