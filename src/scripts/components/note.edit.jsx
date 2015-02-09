@@ -21,9 +21,7 @@ var EditNote = React.createClass({
     var note = this.state.note;
 
     if( !note ) {
-      return (
-        <p>Loading</p>
-      );
+      return null;
     }
 
     // Ensure the note is at least a string, so the component is renderable.
