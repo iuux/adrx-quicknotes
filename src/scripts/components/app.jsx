@@ -24,7 +24,7 @@ var App = React.createClass({
         });
 
         // A category is editable if it has an id.
-        var edit = !!category.id ? <a>Edit</a> : null;
+        var edit = !!category.id ? <Link to="category.edit" params={{id: category.id}} activeClassName="qn-Nav-item--active">Edit</Link> : null;
 
         return (
           <div className="qn-Nav-section">

@@ -7,12 +7,14 @@ var DefaultRoute = Router.DefaultRoute;
 
 var App = require('./components/app');
 var Home = require('./components/home');
+var EditCategory = require('./components/category.edit');
 var NewNote = require('./components/note.new');
 var EditNote = require('./components/note.edit');
 
 var routes = (
   <Route handler={App}>
     <DefaultRoute name="home" handler={Home} />
+    <Route name="category.edit" handler={EditCategory} path="/category/edit/:id" />
     <Route name="note.new" handler={NewNote} path="/note/new" />
     <Route name="note.edit" handler={EditNote} path="/note/edit/:id" />
   </Route>
