@@ -24,6 +24,6 @@ Router.run(routes, function(Handler, state) {
   React.render(<Handler params={state.params} />, document.getElementById('app'));
 });
 
-//var fastClick = require('fastclick');
-// fastclick eliminates 300ms click delay on mobile
-//fastClick(document.body);
+// Eliminate 300ms click delay on mobile.
+var FastClick = require('fastclick');
+FastClick.attach(document.body);
