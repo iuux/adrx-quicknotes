@@ -8,8 +8,10 @@ var categoriesStore = Reflux.createStore({
     this.data = data;
   },
   getInitialState: function() {
-    this.trigger(this.data);
     return this.data;
+  },
+  ping: function() {
+    this.trigger(this.data);
   }
 });
 

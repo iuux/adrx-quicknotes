@@ -11,9 +11,9 @@ var categorizedNotesStore = Reflux.createStore({
   init: function() {
     // Join stores with callback.
     this.joinTrailing(categoriesStore, notesStore, this.process);
-    // Trigger the stores.
-    categoriesStore.getInitialState();
-    notesStore.getInitialState();
+    // Wake up the stores.
+    categoriesStore.ping();
+    notesStore.ping();
   },
   getInitialState: function() {
     return this.data;
