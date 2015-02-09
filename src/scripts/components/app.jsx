@@ -20,6 +20,8 @@ var App = React.createClass({
       return null;
     }
 
+    var cx = React.addons.classSet;
+
     function renderSection(section) {
       return section.map(function(category) {
 
@@ -32,10 +34,15 @@ var App = React.createClass({
         // A category is editable if it has an id.
         var edit = !!category.id ? <Link to="category.edit" params={{id: category.id}} activeClassName="qn-Nav-item--active">Edit</Link> : null;
 
+        var navHeadingClasses = cx({
+          'qn-Nav-heading': true,
+          'qn-Nav-heading--unspecified': !category.id
+        });
+
         return (
           <div className="qn-Nav-section">
             <div className="qn-Nav-sectionHeader">
-              <h2 className="qn-Nav-heading">{category.name}</h2>
+              <h2 className={navHeadingClasses}>{category.name}</h2>
               {edit}
             </div>
             {notes}
