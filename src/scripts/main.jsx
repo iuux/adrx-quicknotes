@@ -1,9 +1,26 @@
 'use strict';
 
 var React = require('react');
-var App = require('./components/app');
+var Router = require('react-router');
+var Route = Router.Route;
+var DefaultRoute = Router.DefaultRoute;
 
-React.render(<App/>, document.getElementById('app'));
+var App = require('./components/app');
+var Home = require('./components/home');
+var NewNote = require('./components/note.new');
+var EditNote = require('./components/note.edit');
+
+var routes = (
+  <Route handler={App}>
+    <DefaultRoute name="home" handler={Home} />
+    <Route name="note.new" handler={NewNote} path="/note/new" />
+    <Route name="note.edit" handler={EditNote} path="/note/edit/:id" />
+  </Route>
+);
+
+Router.run(routes, function(Handler, state) {
+  React.render(<Handler params={state.params} />, document.getElementById('app'));
+});
 
 //var fastClick = require('fastclick');
 // fastclick eliminates 300ms click delay on mobile

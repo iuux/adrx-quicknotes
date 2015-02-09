@@ -2,8 +2,11 @@
 
 var React = require('react');
 var Reflux = require('reflux');
+var Router = require('react-router');
+var Link = Router.Link;
+var RouteHandler = Router.RouteHandler;
+
 var categorizedNotesStore = require('../stores/categorizedNotes');
-var actions = require('../actions');
 
 var App = React.createClass({
   mixins: [
@@ -16,7 +19,7 @@ var App = React.createClass({
 
         var notes = category.notes.map(function(note) {
           return (
-            <a className="qn-Nav-item">{note.title}</a>
+            <Link to="note.edit" params={{id: note.id}} className="qn-Nav-item" activeClassName="qn-Nav-item--active">{note.title}</Link>
           );
         });
 
@@ -42,21 +45,20 @@ var App = React.createClass({
     return (
       <section className="qn-App">
         <header className="qn-Header">
-          <h1 className="qn-Header-heading"><a ui-sref="app">Quick Notes</a></h1>
-          <a className="qn-Button" ui-sref="app.note.new" onClick={this.doSomethingHandler}>New Quick Note</a>
+          <h1 className="qn-Header-heading"><Link to="home">Quick Notes</Link></h1>
+          <Link to="note.new" className="qn-Button">New Quick Note</Link>
         </header>
         <div className="qn-App-body">
           <nav className="qn-App-nav qn-Nav">
             {categorizedSection}
             {uncategorizedSection}
           </nav>
-          <div className="qn-App-content" ui-view></div>
+          <div className="qn-App-content">
+            <RouteHandler {...this.props} />
+          </div>
         </div>
       </section>
     );
-  },
-  doSomethingHandler: function() {
-    actions.doSomething();
   }
 });
 
