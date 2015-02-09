@@ -4,7 +4,8 @@ var Reflux = require('reflux');
 
 var actions = Reflux.createActions([
   'getCategory',
-  'getNote'
+  'getNote',
+  'renameCategory'
 ]);
 
 module.exports = actions;

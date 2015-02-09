@@ -13,6 +13,12 @@ var App = React.createClass({
     Reflux.connect(categorizedNotesStore, 'categorizedNotes')
   ],
   render: function() {
+    // Get data.
+    var data = this.state.categorizedNotes;
+    // Need data to render.
+    if( !data ) {
+      return null;
+    }
 
     function renderSection(section) {
       return section.map(function(category) {
@@ -38,7 +44,7 @@ var App = React.createClass({
       });
     }
 
-    var data = this.state.categorizedNotes;
+    // Render categorized notes.
     var categorizedSection = renderSection(data.categorized);
     var uncategorizedSection = renderSection([data.uncategorized]);
 

@@ -9,8 +9,9 @@ var notesStore = require('./notes');
 var categorizedNotesStore = Reflux.createStore({
   mixins: [mixins],
   init: function() {
-    // Join stores with callback.
-    this.joinTrailing(categoriesStore, notesStore, this.process);
+    // Listen to stores.
+    this.listenTo(categoriesStore, this.onCategoriesStoreChange);
+    this.listenTo(notesStore, this.onNotesStoreChange);
     // Trigger the stores.
     categoriesStore.output();
     notesStore.output();
@@ -18,9 +19,23 @@ var categorizedNotesStore = Reflux.createStore({
   getInitialState: function() {
     return this.data;
   },
-  process: function(categories, notes) {
-    categories = categories[0];
-    notes = notes[0];
+  onCategoriesStoreChange: function(status) {
+    this.categoriesStoreCache = status;
+    this.process();
+  },
+  onNotesStoreChange: function(status) {
+    this.notesStoreCache = status;
+    this.process();
+  },
+  process: function() {
+    // Get cached stores.
+    var categories = this.categoriesStoreCache;
+    var notes = this.notesStoreCache;
+
+    // Don't do anything if there aren't cached stores.
+    if( !categories || !notes ) {
+      return;
+    }
 
     // Create an array to hold each category's notes.
     Object.keys(categories).forEach(function(key) {
