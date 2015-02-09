@@ -2,5 +2,5 @@ var gulp = require('gulp');
 var runSequence = require('run-sequence');
 
 gulp.task('default', function(callback) {
-  runSequence('clean', ['build', 'vendor'], 'browser-sync', ['styles', 'scripts'], 'watch', callback);
+  runSequence('clean', ['build', 'styles', 'vendor', 'scripts'], 'browser-sync', 'watch', callback);
 });
