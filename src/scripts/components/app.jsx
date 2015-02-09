@@ -32,7 +32,7 @@ var App = React.createClass({
         });
 
         // A category is editable if it has an id.
-        var edit = !!category.id ? <Link to="category.edit" params={{id: category.id}} activeClassName="qn-Nav-item--active">Edit</Link> : null;
+        var categoryName = !!category.id ? <Link to="category.edit" params={{id: category.id}} className="qn-Nav-item" activeClassName="qn-Nav-item--active">{category.name}</Link> : category.name;
 
         var navHeadingClasses = cx({
           'qn-Nav-heading': true,
@@ -40,11 +40,8 @@ var App = React.createClass({
         });
 
         return (
-          <div className="qn-Nav-section">
-            <div className="qn-Nav-sectionHeader">
-              <h2 className={navHeadingClasses}>{category.name}</h2>
-              {edit}
-            </div>
+          <div>
+            <h2 className={navHeadingClasses}>{categoryName}</h2>
             {notes}
           </div>
         );
