@@ -7,7 +7,6 @@ var uglify = require('gulp-uglify');
 var gzip = require('gulp-gzip');
 
 var bundler = browserify({
-  noparse: ['react', 'react/addons', 'reflux', 'fastclick', 'react-router'],
   entries: ['./src/scripts/main.jsx'],
   transform: [reactify],
   extensions: ['.jsx'],
