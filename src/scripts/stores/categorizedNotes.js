@@ -3,34 +3,34 @@
 var Reflux = require('reflux');
 
 var mixins = require('./mixins');
-var categoriesStore = require('./categories');
-var notesStore = require('./notes');
+var categoryListStore = require('./categoryList');
+var noteListStore = require('./noteList');
 
 var categorizedNotesStore = Reflux.createStore({
   mixins: [mixins],
   init: function() {
     // Listen to stores.
-    this.listenTo(categoriesStore, this.onCategoriesStoreChange);
-    this.listenTo(notesStore, this.onNotesStoreChange);
+    this.listenTo(categoryListStore, this.onCategoryListStoreChange);
+    this.listenTo(noteListStore, this.onNoteListStoreChange);
     // Trigger the stores.
-    categoriesStore.output();
-    notesStore.output();
+    categoryListStore.output();
+    noteListStore.output();
   },
   getInitialState: function() {
     return this.data;
   },
-  onCategoriesStoreChange: function(status) {
-    this.categoriesStoreCache = status;
+  onCategoryListStoreChange: function(status) {
+    this.categoryListStoreCache = status;
     this.process();
   },
-  onNotesStoreChange: function(status) {
-    this.notesStoreCache = status;
+  onNoteListStoreChange: function(status) {
+    this.noteListStoreCache = status;
     this.process();
   },
   process: function() {
     // Get cached stores.
-    var categories = this.categoriesStoreCache;
-    var notes = this.notesStoreCache;
+    var categories = this.categoryListStoreCache;
+    var notes = this.noteListStoreCache;
 
     // Don't do anything if there aren't cached stores.
     if( !categories || !notes ) {

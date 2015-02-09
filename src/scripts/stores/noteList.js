@@ -1,7 +1,8 @@
 'use strict';
 
 var Reflux = require('reflux');
-var data = require('./notes.json');
+
+var data = require('./noteList.json');
 
 var notesStore = Reflux.createStore({
   init: function() {

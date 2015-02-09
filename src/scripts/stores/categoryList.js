@@ -2,7 +2,7 @@
 
 var Reflux = require('reflux');
 
-var data = require('./categories.json');
+var data = require('./categoryList.json');
 var actions = require('../actions');
 
 var categoriesStore = Reflux.createStore({
@@ -15,8 +15,6 @@ var categoriesStore = Reflux.createStore({
   },
   onRenameCategory: function(id, name) {
     this.data[id].name = name;
-    //console.log('renaming in store', id, 'to', name);
-    //console.log(this.data);
     this.output();
   },
   output: function() {

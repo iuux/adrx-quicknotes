@@ -2,13 +2,13 @@
 
 var Reflux = require('reflux');
 
-var categoriesStore = require('./categories');
+var categoryListStore = require('./categoryList');
 var actions = require('../actions');
 
 var categoryStore = Reflux.createStore({
   listenables: actions,
   onGetCategory: function(id) {
-    var category = categoriesStore.data[id];
+    var category = categoryListStore.data[id];
     this.trigger(category);
   }
 });
