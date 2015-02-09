@@ -42,6 +42,7 @@
   "browserify-shim": {
     "react": "global:React",
     "react/addons": "global:React",
+    "react-router": "global:ReactRouter",
     "reflux": "global:Reflux",
     "fastclick": "global:FastClick"
   }
