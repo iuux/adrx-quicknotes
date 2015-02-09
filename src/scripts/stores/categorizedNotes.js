@@ -1,19 +1,19 @@
 'use strict';
 
 var Reflux = require('reflux');
+
 var mixins = require('./mixins');
 var categoriesStore = require('./categories');
 var notesStore = require('./notes');
-var actions = require('../actions');
 
 var categorizedNotesStore = Reflux.createStore({
   mixins: [mixins],
   init: function() {
     // Join stores with callback.
     this.joinTrailing(categoriesStore, notesStore, this.process);
-    // Wake up the stores.
-    categoriesStore.ping();
-    notesStore.ping();
+    // Trigger the stores.
+    categoriesStore.output();
+    notesStore.output();
   },
   getInitialState: function() {
     return this.data;
@@ -59,10 +59,6 @@ var categorizedNotesStore = Reflux.createStore({
   },
   output: function() {
     this.trigger(this.data);
-  },
-  listenables: actions,
-  onDoSomething: function() {
-    console.log('Doing something in store');
   }
 });
 

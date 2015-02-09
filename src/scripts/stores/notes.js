@@ -10,7 +10,7 @@ var notesStore = Reflux.createStore({
   getInitialState: function() {
     return this.data;
   },
-  ping: function() {
+  output: function() {
     this.trigger(this.data);
   }
 });
