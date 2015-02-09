@@ -43,6 +43,7 @@
     "react": "global:React",
     "react/addons": "global:React",
     "react-router": "global:ReactRouter",
-    "reflux": "global:Reflux"
+    "reflux": "global:Reflux",
+    "superagent": "global:superagent"
   }
 }
