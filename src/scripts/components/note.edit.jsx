@@ -21,7 +21,6 @@ var EditNote = React.createClass({
     this.sourceState = note;
     // Holds a copy of source data to be modified by user input.
     this.setState({
-      id: note.id,
       title: note.title,
       categoryId: note.categoryId,
       note: note.note || ''
@@ -78,7 +77,7 @@ var EditNote = React.createClass({
   },
   onSubmit: function(e) {
     e.preventDefault();
-    actions.updateNote(this.state.id, this.state);
+    actions.updateNote(this.sourceState.id, this.state);
     this.onCancel();
   },
   onCancel: function() {

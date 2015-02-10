@@ -15,6 +15,7 @@ var notesStore = Reflux.createStore({
   },
   onUpdateNote: function(id, note) {
     // Clean input.
+    note.id = id;
     note.title = note.title.trim();
     note.note = note.note.trim();
     // Update data.
