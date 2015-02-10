@@ -17,6 +17,8 @@ var categoriesStore = Reflux.createStore({
   onRenameCategory: function(id, name) {
     // Retain source.
     var _name = this.data[id].name;
+    // Clean input.
+    name = name.trim();
     // Optimistically rename.
     this._renameCategory(id, name);
     // Retain context.
