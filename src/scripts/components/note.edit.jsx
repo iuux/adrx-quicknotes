@@ -5,6 +5,7 @@ var Router = require('react-router');
 
 var noteStore = require('../stores/note');
 var actions = require('../actions');
+var config = require('../config');
 
 var EditNote = React.createClass({
   mixins: [
@@ -38,17 +39,25 @@ var EditNote = React.createClass({
       <form className="qn-Content" onSubmit={this.onSubmit}>
         <h2 className="qn-Content-heading">Edit Quick Note</h2>
         <label className="qn-Label" htmlFor="qn-Input">Title</label>
-        <input className="qn-Input" id="qn-Input" required value={this.state.title} onChange={this.onTitleInputChange}/>
+        <input className="qn-Input" id="qn-Input" type="text" required
+          maxLength={config.NOTE_TITLE_MAXLENGTH}
+          value={this.state.title}
+          onChange={this.onTitleInputChange}/>
         <label className="qn-Label" htmlFor="qn-Category">Category</label>
         <select id="qn-Category">
           <option>One</option>
           <option>Two</option>
         </select>
         <label className="qn-Label" htmlFor="qn-Note">Note</label>
-        <textarea className="qn-Input qn-Input--textarea" id="qn-Note" required value={this.state.note} onChange={this.onNoteInputChange}></textarea>
+        <textarea className="qn-Input qn-Input--textarea" id="qn-Note" required
+          maxLength={config.NOTE_NOTE_MAXLENGTH}
+          value={this.state.note}
+          onChange={this.onNoteInputChange}></textarea>
         <div className="qn-ActionBar">
-          <button className="qn-ActionBar-item qn-Button" type="submit" disabled={this.isInvalid}>Save</button>
-          <button className="qn-ActionBar-item qn-Button" onClick={this.onCancel}>Cancel</button>
+          <button className="qn-ActionBar-item qn-Button" type="submit"
+            disabled={this.isInvalid}>Save</button>
+          <button className="qn-ActionBar-item qn-Button"
+            onClick={this.onCancel}>Cancel</button>
         </div>
       </form>
     );

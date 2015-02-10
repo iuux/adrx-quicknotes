@@ -5,6 +5,7 @@ var Router = require('react-router');
 
 var categoryStore = require('../stores/category');
 var actions = require('../actions');
+var config = require('../config');
 
 var EditCategory = React.createClass({
   mixins: [
@@ -22,7 +23,7 @@ var EditCategory = React.createClass({
     // Holds a copy of category data to be modified by user input.
     this.setState({
       name: category.name
-    })
+    });
   },
   render: function() {
     // Only render if there's a state.
@@ -36,10 +37,15 @@ var EditCategory = React.createClass({
       <form className="qn-Content" onSubmit={this.onSubmit}>
         <h2 className="qn-Content-heading">Edit category</h2>
         <label className="qn-Label" for="qn-Input">Name</label>
-        <input className="qn-Input" id="qn-Input" required value={this.state.name} onChange={this.onNameInputChange}/>
+        <input className="qn-Input" id="qn-Input" type="text" required
+          maxLength={config.CATEGORY_NAME_MAXLENGTH}
+          value={this.state.name}
+          onChange={this.onNameInputChange}/>
         <div className="qn-ActionBar">
-          <button className="qn-ActionBar-item qn-Button" type="submit" disabled={this.isInvalid}>Rename</button>
-          <button className="qn-ActionBar-item qn-Button" onClick={this.onCancel}>Cancel</button>
+          <button className="qn-ActionBar-item qn-Button" type="submit"
+            disabled={this.isInvalid}>Rename</button>
+          <button className="qn-ActionBar-item qn-Button"
+            onClick={this.onCancel}>Cancel</button>
         </div>
       </form>
     );
