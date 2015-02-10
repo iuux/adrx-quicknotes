@@ -58,12 +58,28 @@ var categorizedNotesStore = Reflux.createStore({
       }
     });
 
-    // Sort categories by name
-    // Sort categorized notes by title
-    // Sort uncategorized notes by title
+    // Sorting functions.
+    function sortNotesByTitle(a, b) {
+      return a.title > b.title;
+    }
+
+    function sortCategoriesByName(a, b) {
+      return a.name > b.name;
+    }
+
+    // Sort categories.
+    var categorizedNotes = this.objectToArray(categories).sort(sortCategoriesByName);
+
+    // Sort notes.
+    categorizedNotes.forEach(function(category) {
+      category.notes.sort(sortNotesByTitle);
+    });
+
+    // Sort uncategorized notes
+    uncategorizedNotes.sort(sortNotesByTitle);
 
     this.data = {
-      categorized: this.objectToArray(categories),
+      categorized: categorizedNotes,
       uncategorized: {
         name: 'Unspecified',
         notes: uncategorizedNotes
