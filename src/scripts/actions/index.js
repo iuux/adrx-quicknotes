@@ -3,10 +3,13 @@
 var Reflux = require('reflux');
 
 var actions = Reflux.createActions([
+  // Category
   'getCategory',
-  'getNote',
   'renameCategory',
-  'renameCategoryFailed'
+  'renameCategoryFailed',
+  // Note
+  'getNote',
+  'updateNote'
 ]);
 
 module.exports = actions;
