@@ -18,7 +18,6 @@ var EditNote = React.createClass({
     }
   },
   onStoreChange: function(note) {
-    //note.note = note.note || '';
     this.sourceState = note;
     // Holds a copy of source data to be modified by user input.
     this.setState({
