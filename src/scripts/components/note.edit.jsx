@@ -48,7 +48,7 @@ var EditNote = React.createClass({
         <label className="qn-Label" htmlFor="qn-Note">Note</label>
         <textarea className="qn-Input qn-Input--textarea" id="qn-Note" required value={this.state.note} onChange={this.onNoteInputChange}></textarea>
         <div className="qn-ActionBar">
-          <button className="qn-ActionBar-item qn-Button" disabled={this.isInvalid}>Save</button>
+          <button className="qn-ActionBar-item qn-Button" type="submit" disabled={this.isInvalid}>Save</button>
           <button className="qn-ActionBar-item qn-Button" onClick={this.onCancel}>Cancel</button>
         </div>
       </form>
