@@ -7,6 +7,7 @@ var actions = Reflux.createActions([
   'getCategory',
   'renameCategory',
   'renameCategoryFailed',
+  'renameCategorySucceeded',
   // Note
   'getNote',
   'updateNote'

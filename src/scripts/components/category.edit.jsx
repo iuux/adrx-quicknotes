@@ -10,7 +10,8 @@ var config = require('../config');
 var EditCategory = React.createClass({
   mixins: [
     Router.Navigation,
-    Reflux.listenTo(categoryStore, 'onStoreChange')
+    Reflux.listenTo(categoryStore, 'onStoreChange'),
+    Reflux.listenToMany(actions)
   ],
   statics: {
     // Get the note by its id when transitioning to this component.
@@ -33,6 +34,10 @@ var EditCategory = React.createClass({
 
     this.checkValidity();
 
+    var isSubmitDisabled = this.isInvalid || this.state.requesting;
+    var submitButtonLabel = this.state.requesting ? 'Renaming' : 'Rename';
+    var processIndicator = this.state.requesting ? (<span className="qn-ProcessIndicator"/>) : null;
+
     return (
       <form className="qn-Content" onSubmit={this.onSubmit}>
         <h2 className="qn-Content-heading">Edit category</h2>
@@ -43,7 +48,7 @@ var EditCategory = React.createClass({
           onChange={this.onNameInputChange}/>
         <div className="qn-ActionBar">
           <button className="qn-ActionBar-item qn-Button" type="submit"
-            disabled={this.isInvalid}>Rename</button>
+            disabled={isSubmitDisabled}>{submitButtonLabel}{processIndicator}</button>
           <button className="qn-ActionBar-item qn-Button"
             onClick={this.onCancel}>Cancel</button>
         </div>
@@ -68,10 +73,20 @@ var EditCategory = React.createClass({
   onSubmit: function(e) {
     e.preventDefault();
     actions.renameCategory(this.sourceState.id, this.state.name);
-    this.onCancel();
+    this.setState({
+      requesting: true
+    });
   },
   onCancel: function() {
     this.transitionTo('home');
+  },
+  onRenameCategorySucceeded: function(id) {
+    this.onCancel();
+  },
+  onRenameCategoryFailed: function(id, sourceName, newName) {
+    this.setState({
+      requesting: false
+    });
   }
 });
 
