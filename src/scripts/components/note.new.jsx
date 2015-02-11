@@ -12,6 +12,7 @@ var NewNote = React.createClass({
         <form>
           <label className="qn-Label" htmlFor="qn-Input">Title</label>
           <input className="qn-Input" id="qn-Input" type="text" required
+            autoFocus
             maxLength={config.NOTE_TITLE_MAXLENGTH}/>
           <label className="qn-Label" htmlFor="qn-Category">Category</label>
           <select id="qn-Category">

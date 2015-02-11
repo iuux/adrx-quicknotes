@@ -25,6 +25,8 @@ var EditCategory = React.createClass({
     this.setState({
       name: category.name
     });
+    // Change focus to first input field.
+    this.refs.qnInput.getDOMNode().focus();
   },
   render: function() {
     // Only render if there's a state.
@@ -43,6 +45,7 @@ var EditCategory = React.createClass({
         <h2 className="qn-Content-heading">Edit category</h2>
         <label className="qn-Label" for="qn-Input">Name</label>
         <input className="qn-Input" id="qn-Input" type="text" required
+          ref="qnInput" autoFocus
           maxLength={config.CATEGORY_NAME_MAXLENGTH}
           value={this.state.name}
           onChange={this.onNameInputChange}/>

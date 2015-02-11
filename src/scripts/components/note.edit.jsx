@@ -26,6 +26,8 @@ var EditNote = React.createClass({
       categoryId: note.categoryId,
       note: note.note || ''
     });
+    // Change focus to first input field.
+    this.refs.qnInput.getDOMNode().focus();
   },
   render: function() {
     // Only render if there's a state.
@@ -40,6 +42,7 @@ var EditNote = React.createClass({
         <h2 className="qn-Content-heading">Edit Quick Note</h2>
         <label className="qn-Label" htmlFor="qn-Input">Title</label>
         <input className="qn-Input" id="qn-Input" type="text" required
+          ref="qnInput" autoFocus
           maxLength={config.NOTE_TITLE_MAXLENGTH}
           value={this.state.title}
           onChange={this.onTitleInputChange}/>
