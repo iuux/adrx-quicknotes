@@ -23,7 +23,7 @@ var NewNote = React.createClass({
           <textarea className="qn-Input qn-Input--textarea" id="qn-Note" required
             maxLength={config.NOTE_NOTE_MAXLENGTH}></textarea>
           <div className="qn-ActionBar">
-            <button className="qn-ActionBar-item qn-Button">Save</button>
+            <button className="qn-ActionBar-item qn-Button qn-Button--primary">Save</button>
             <button className="qn-ActionBar-item qn-Button">Cancel</button>
           </div>
         </form>
