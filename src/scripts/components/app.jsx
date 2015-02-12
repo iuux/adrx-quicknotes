@@ -27,12 +27,18 @@ var App = React.createClass({
 
         var notes = category.notes.map(function(note) {
           return (
-            <Link to="note.edit" params={{id: note.id}} className="qn-Nav-item" activeClassName="qn-Nav-item--active">{note.title}</Link>
+            <Link to="note.edit" params={{id: note.id}}
+              className="qn-Nav-item"
+              activeClassName="qn-Nav-item--active">{note.title}</Link>
           );
         });
 
         // A category is editable if it has an id.
-        var categoryName = !!category.id ? <Link to="category.edit" params={{id: category.id}} className="qn-Nav-item" activeClassName="qn-Nav-item--active">{category.name}</Link> : category.name;
+        var categoryName = !category.id ? category.name : (
+          <Link to="category.edit" params={{id: category.id}}
+            className="qn-Nav-item"
+            activeClassName="qn-Nav-item--active">{category.name}</Link>
+        );
 
         var navHeadingClasses = cx({
           'qn-Nav-heading': true,
@@ -55,7 +61,9 @@ var App = React.createClass({
     return (
       <section className="qn-App">
         <header className="qn-Header">
-          <h1 className="qn-Header-heading"><Link to="home">Quick Notes</Link></h1>
+          <h1 className="qn-Header-heading">
+            <Link to="home">Quick Notes</Link>
+          </h1>
           <Link to="note.new" className="qn-Button">New Quick Note</Link>
         </header>
         <div className="qn-App-body">

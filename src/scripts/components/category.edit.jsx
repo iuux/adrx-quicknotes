@@ -51,7 +51,9 @@ var EditCategory = React.createClass({
           onChange={this.onNameInputChange}/>
         <div className="qn-ActionBar">
           <button className="qn-ActionBar-item qn-Button" type="submit"
-            disabled={isSubmitDisabled}>{submitButtonLabel}{processIndicator}</button>
+            disabled={isSubmitDisabled}>
+            {submitButtonLabel}
+            {processIndicator}</button>
           <button className="qn-ActionBar-item qn-Button"
             onClick={this.onCancel}>Cancel</button>
         </div>
