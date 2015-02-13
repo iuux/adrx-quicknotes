@@ -1,0 +1,96 @@
+.qn-CategorySelector {
+
+  &-selected {
+    background-color: inherit;
+    border: 0.1em solid @color-Interactive--400;
+    border-radius: 0.25em;
+    cursor: pointer;
+    display: inline-block;
+    padding: 0.5em;
+
+    &--unspecified {
+      font-style: italic;
+    }
+  }
+
+  &-icon {
+    margin-left: 1em;
+  }
+
+  &-options {
+    border: 0.1em solid @color-Interactive--400;
+    margin: 0.1em 0 0;
+    max-width: 20em;
+    padding: 0;
+
+    &--hide {
+      display: none;
+    }
+  }
+
+  &-legend {
+    display: block;
+    font-weight: bold;
+    margin: 0 0 0.5em;
+    position: absolute;
+    left: -9999em;
+  }
+
+  &-option {
+
+    & + & {
+
+    }
+
+    &--newCategory {
+      border-top: 0.1em solid @color-Interactive--150;
+      padding: 0 0.5em 0.5em;
+    }
+  }
+
+  &-radioInput {
+    left: 0;
+    position: absolute;
+
+    &:focus {
+      position: absolute;
+
+      + .qn-CategorySelector-radioLabel {
+        .focus();
+      }
+    }
+
+    &:checked {
+
+      + .qn-CategorySelector-radioLabel {
+        //background-color: @color-Interactive--150;
+      }
+    }
+  }
+
+  &-radioLabel {
+    color: inherit;
+    display: flex;
+    padding: 0.5em;
+    text-decoration: none;
+
+    &:hover {
+      background-color: @color-Interactive--100;
+    }
+
+    &--unspecified {
+      color: @color-Text--400;
+      font-style: italic;
+    }
+  }
+
+  &-radioLabelText {
+    flex: 1;
+  }
+
+  &-inputLabel {
+    display: block;
+    font-weight: bold;
+    padding: 0.5em 0;
+  }
+}

@@ -7,6 +7,8 @@ var noteStore = require('../stores/note');
 var actions = require('../actions');
 var config = require('../config');
 
+var CategorySelector = require('./category-selector');
+
 var EditNote = React.createClass({
   mixins: [
     Router.Navigation,
@@ -24,6 +26,7 @@ var EditNote = React.createClass({
     this.setState({
       title: note.title,
       categoryId: note.categoryId,
+      newCategoryName: '',
       note: note.note || ''
     });
     // Change focus to first input field.
@@ -46,11 +49,10 @@ var EditNote = React.createClass({
           maxLength={config.NOTE_TITLE_MAXLENGTH}
           value={this.state.title}
           onChange={this.onTitleInputChange}/>
-        <label className="qn-Label" htmlFor="qn-Category">Category</label>
-        <select id="qn-Category">
-          <option>One</option>
-          <option>Two</option>
-        </select>
+        <CategorySelector
+          selectedCategoryId={this.state.categoryId}
+          newCategoryName={this.state.newCategoryName}
+          onChange={this.onCategorySelectorChange}/>
         <label className="qn-Label" htmlFor="qn-Note">Note</label>
         <textarea className="qn-Input qn-Input--textarea" id="qn-Note" required
           maxLength={config.NOTE_NOTE_MAXLENGTH}
@@ -81,6 +83,12 @@ var EditNote = React.createClass({
     this.setState({
       title: e.target.value
     });
+  },
+  onCategorySelectorChange: function(e) {
+    this.setState({
+      categoryId: e.categoryId
+    });
+    console.log('cat select change', e);
   },
   onNoteInputChange: function(e) {
     this.setState({
