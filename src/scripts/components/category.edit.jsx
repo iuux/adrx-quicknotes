@@ -48,7 +48,8 @@ var EditCategory = React.createClass({
           ref="qnInput" autoFocus
           maxLength={config.CATEGORY_NAME_MAXLENGTH}
           value={this.state.name}
-          onChange={this.onNameInputChange}/>
+          onChange={this.onNameInputChange}
+          disabled={this.state.requesting}/>
         <div className="qn-ActionBar">
           <button className="qn-ActionBar-item qn-Button" type="submit"
             disabled={isSubmitDisabled}>
