@@ -159,7 +159,10 @@ var CategorySelector = React.createClass({
   handleCancel: function(e) {
     // Cancel any changes and close.
     this.handleToggleOptions(e);
-    this.revert();
+    // Reset new category name to previously entered value.
+    this.setState({
+      newCategoryName: this.props.newCategoryName
+    });
   },
   handleOptionInputChange: function(e) {
     // Close the options.
@@ -196,7 +199,14 @@ var CategorySelector = React.createClass({
     var newCategoryName = e.target.value.trim();
     // Validate that the input has content.
     if(!newCategoryName.length) {
-      this.revert();
+      // Set category to unspecified.
+      this.props.onChange({
+        categoryId: 0
+      });
+      // Clear new category name input value.
+      this.setState({
+        newCategoryName: null
+      });
       return;
     }
     // Inform the parent component about the change.
@@ -206,12 +216,6 @@ var CategorySelector = React.createClass({
     // Match internal state to outer state.
     this.setState({
       newCategoryName: newCategoryName
-    });
-  },
-  revert: function() {
-    // Reset new category name to previously entered value.
-    this.setState({
-      newCategoryName: this.props.newCategoryName
     });
   }
 });
