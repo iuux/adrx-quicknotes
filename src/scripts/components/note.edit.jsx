@@ -25,7 +25,7 @@ var EditNote = React.createClass({
     // Holds a copy of source data to be modified by user input.
     this.setState({
       title: note.title,
-      categoryId: note.categoryId,
+      categoryId: note.categoryId || 0,
       newCategoryName: '',
       note: note.note || ''
     });
@@ -41,28 +41,28 @@ var EditNote = React.createClass({
     this.checkValidity();
 
     return (
-      <form className="qn-Content" onSubmit={this.onSubmit}>
+      <form className="qn-Content" onSubmit={this.handleSubmit}>
         <h2 className="qn-Content-heading">Edit Quick Note</h2>
         <label className="qn-Label" htmlFor="qn-Input">Title</label>
         <input className="qn-Input" id="qn-Input" type="text" required
           ref="qnInput" autoFocus
           maxLength={config.NOTE_TITLE_MAXLENGTH}
           value={this.state.title}
-          onChange={this.onTitleInputChange}/>
+          onChange={this.handleTitleInputChange}/>
         <CategorySelector
           selectedCategoryId={this.state.categoryId}
           newCategoryName={this.state.newCategoryName}
-          onChange={this.onCategorySelectorChange}/>
+          onChange={this.handleCategorySelectorChange}/>
         <label className="qn-Label" htmlFor="qn-Note">Note</label>
         <textarea className="qn-Input qn-Input--textarea" id="qn-Note" required
           maxLength={config.NOTE_NOTE_MAXLENGTH}
           value={this.state.note}
-          onChange={this.onNoteInputChange}></textarea>
+          onChange={this.handleNoteInputChange}></textarea>
         <div className="qn-ActionBar">
           <button className="qn-ActionBar-item qn-Button qn-Button--primary" type="submit"
             disabled={this.isInvalid}>Save</button>
           <button className="qn-ActionBar-item qn-Button"
-            onClick={this.onCancel}>Cancel</button>
+            onClick={this.handleCancel}>Cancel</button>
         </div>
       </form>
     );
@@ -79,28 +79,29 @@ var EditNote = React.createClass({
     this.isValid = hasInput && diff;
     this.isInvalid = !this.isValid;
   },
-  onTitleInputChange: function(e) {
+  handleTitleInputChange: function(e) {
     this.setState({
       title: e.target.value
     });
   },
-  onCategorySelectorChange: function(e) {
+  handleCategorySelectorChange: function(e) {
     this.setState({
-      categoryId: e.categoryId
+      categoryId: e.categoryId,
+      newCategoryName: e.newCategoryName || null
     });
     console.log('cat select change', e);
   },
-  onNoteInputChange: function(e) {
+  handleNoteInputChange: function(e) {
     this.setState({
       note: e.target.value
     });
   },
-  onSubmit: function(e) {
+  handleSubmit: function(e) {
     e.preventDefault();
     actions.updateNote(this.sourceState.id, this.state);
     this.onCancel();
   },
-  onCancel: function() {
+  handleCancel: function() {
     this.transitionTo('home');
   }
 });

@@ -13,69 +13,92 @@ var CategorySelector = React.createClass({
   ],
   getInitialState: function() {
     return {
-      showOptions: false
+      showOptions: true,
+      newCategoryName: this.props.newCategoryName
     };
   },
   render: function() {
-    var categoryList = this.state.categorizedNotes.categorized;
-    var unspecifiedCategory = this.state.categorizedNotes.uncategorized;
+    var isNewCategorySelected = !!this.props.newCategoryName;
+    var isUncategoriedSelected = !isNewCategorySelected && !this.props.selectedCategoryId;
 
-    var isSelectedUncategoried = !this.props.selectedCategoryId;
-
-    var selectedClasses = cx({
-      'qn-CategorySelector-selected': true,
-      'qn-CategorySelector-selected--unspecified': isSelectedUncategoried
+    var selectionClasses = cx({
+      'qn-CategorySelector-selection': true,
+      'qn-CategorySelector-selection--unspecified': isUncategoriedSelected
     });
 
-    var selectedCategory = isSelectedUncategoried ? unspecifiedCategory : (
-      categoryList.filter(function(category) {
+    // Determine category name.
+    var selectedName = null;
+    if(isNewCategorySelected) {
+      selectedName = this.props.newCategoryName;
+    }
+    else if(isUncategoriedSelected) {
+      var unspecifiedCategory = this.state.categorizedNotes.uncategorized;
+      selectedName = unspecifiedCategory.name;
+    }
+    else {
+      var categoryList = this.state.categorizedNotes.categorized;
+      var selectedCategory = categoryList.filter(function(category) {
         return category.id == this.props.selectedCategoryId;
-      }.bind(this))[0]
-    );
+      }.bind(this))[0];
+      selectedName = selectedCategory.name;
+    }
 
-    categoryList = categoryList.map(this.renderCategoryRadioInput);
-    unspecifiedCategory = [unspecifiedCategory].map(this.renderCategoryRadioInput);
-
-    var fieldsetClasses = cx({
-      'qn-CategorySelector-options': true,
-      'qn-CategorySelector-options--hide': !this.state.showOptions
-    });
-
-    var options = (
-      <fieldset className={fieldsetClasses}>
-        <legend className="qn-CategorySelector-legend">Category</legend>
-        {categoryList}
-        {unspecifiedCategory}
-        <div className="qn-CategorySelector-option qn-CategorySelector-option--newCategory">
-          <label className="qn-CategorySelector-inputLabel"
-            htmlFor="newCategoryInput">New category</label>
-          <input className="qn-Input" type="text" id="newCategoryInput"
-            onChange={this.onNewCategoryInputChange}/>
-        </div>
-      </fieldset>
-    );
+    // Optionally render options.
+    var options = this.state.showOptions ? this.renderOptions() : null;
 
     return (
       <div className="qn-CategorySelector">
-        <label className="qn-Label">Category</label>
-        <button className={selectedClasses}
-          ref="toggleButton"
-          onClick={this.onToggleOptions}>
-          {selectedCategory.name}
+        <label className="qn-Label" htmlFor="toggleButton">Category</label>
+        <button className={selectionClasses}
+          ref="toggleButton" id="toggleButton"
+          onClick={this.handleToggleOptions}>
+          {selectedName}
           <Icon name="caret-bottom" className="qn-CategorySelector-icon"/>
         </button>
         {options}
       </div>
     );
   },
-  renderCategoryRadioInput: function(category) {
-    var id = category.id ? category.id : 0;
-    var radioId = 'category' + id;
-    var isSelected = (this.props.selectedCategoryId || 0) == id;
+  renderOptions: function() {
+    var categoryList = this.state.categorizedNotes.categorized;
+    var unspecifiedCategory = this.state.categorizedNotes.uncategorized;
 
-    var radioLabelClasses = cx({
-      'qn-CategorySelector-radioLabel': true,
-      'qn-CategorySelector-radioLabel--unspecified': !category.id
+    // Render sub-components.
+    categoryList = categoryList.map(this.renderCategoryInput);
+    unspecifiedCategory = [unspecifiedCategory].map(this.renderCategoryInput);
+
+    var isNewCategorySelected = !!this.props.newCategoryName;
+    var newCategoryIcon = isNewCategorySelected ? (<Icon name="check"/>) : null;
+
+    return (
+      <fieldset className="qn-CategorySelector-options">
+        <legend className="qn-CategorySelector-legend">Select category</legend>
+        {categoryList}
+        {unspecifiedCategory}
+        <div className="qn-CategorySelector-option qn-CategorySelector-option--newCategory">
+          <label className="qn-CategorySelector-label"
+            htmlFor="newCategoryInput">
+            <span className='qn-CategorySelector-labelText'>New category</span>
+            {newCategoryIcon}
+          </label>
+          <input className="qn-Input" type="text"
+            id="newCategoryInput" ref="newCategoryInput"
+            onChange={this.handleNewCategoryInputChange}
+            onKeyDown={this.handleNewCategoryInputKeyDown}
+            value={this.state.newCategoryName}/>
+        </div>
+      </fieldset>
+    );
+  },
+  renderCategoryInput: function(category) {
+    var id = !!category.id ? category.id : 0;
+    var optionId = 'category' + id;
+    var isSelected = this.props.selectedCategoryId == id;
+
+    var optionLabelClasses = cx({
+      'qn-CategorySelector-label': true,
+      'qn-CategorySelector-label--option': true,
+      'qn-CategorySelector-label--unspecified': !category.id
     });
 
     var icon = isSelected ? (<Icon name="check"/>) : null;
@@ -84,78 +107,91 @@ var CategorySelector = React.createClass({
       this.onCategorySelection(e, id);
     }.bind(this);
 
-    //var refId = isSelected ? 'selectedOption' : null;
-
-    //var refId = 'categoryInput' + id;
-
     return (
-      /*
-      <a href="#" ref={refId} className={radioLabelClasses} onClick={selectCategory}>
-        <span className='qn-CategorySelector-radioLabelText'>{category.name}</span>
-        {icon}
-      </a>
-*/
       <div className="qn-CategorySelector-option">
-        <input className="qn-CategorySelector-radioInput"
-          id={radioId} type="checkbox" name={radioId}
-          ref={radioId}
-          onChange={this.onRadioInputChange}
+        <input className="qn-CategorySelector-input"
+          id={optionId} type="checkbox" name={optionId}
+          ref={optionId}
+          onChange={this.handleOptionInputChange}
+          onKeyDown={this.handleOptionInputKeyDown}
           value={id}
           checked={isSelected} />
-        <label className={radioLabelClasses}
-          htmlFor={radioId}>
-          <span className='qn-CategorySelector-radioLabelText'>{category.name}</span>
+        <label className={optionLabelClasses}
+          htmlFor={optionId}>
+          <span className='qn-CategorySelector-labelText'>{category.name}</span>
           {icon}
         </label>
       </div>
     );
   },
-  onToggleOptions: function(e) {
+  handleToggleOptions: function(e) {
     e.preventDefault();
-    console.log('toggling');
-    this.toggleOptions();
-  },
-  toggleOptions: function(e) {
     this.setState({
       showOptions: !this.state.showOptions
-    });
-
+    }, this.toggleOptionsRenderCallback);
+  },
+  toggleOptionsRenderCallback: function() {
     if(this.state.showOptions) {
-      this.refs.toggleButton.getDOMNode().focus();
+      // Put focus on the appropriate input.
+      var newCategoryRefId = 'newCategoryInput';
+      var categoryRefId = 'category' + this.props.selectedCategoryId;
+      var refId = !!this.props.newCategoryName ? newCategoryRefId : categoryRefId;
+      this.refs[refId].getDOMNode().focus();
     }
     else {
-      var refId = 'category' + this.props.selectedCategoryId;
-      var ref = this.refs[refId];
       // Put focus back on the button.
-      setTimeout(function() {
-        ref.getDOMNode().focus();
-      }, 0);
+      this.refs.toggleButton.getDOMNode().focus();
     }
   },
-  /*
-  onCategorySelection: function(e, id) {
-    e.preventDefault();
+  handleOptionInputChange: function(e) {
     // Close the options.
-    this.toggleOptions();
-    //this.refs.toggleButton.getDOMNode().focus();
-    // Inform the parent component about the change.
-    this.props.onChange({
-      categoryId: id
-    });
-  },
-  */
-  onRadioInputChange: function(e) {
-    //e.preventDefault();
-    console.log('changing check', e.target.value);
-    // Close the options.
-    this.toggleOptions();
+    this.handleToggleOptions(e);
     // Inform the parent component about the change.
     this.props.onChange({
       categoryId: parseInt(e.target.value)
     });
+    // Clear new category name input value.
+    this.setState({
+      newCategoryName: null
+    });
   },
-  onNewCategoryInputChange: function(e) {
-    console.log('new cat', e.target.value);
+  handleOptionInputKeyDown: function(e) {
+    // Enter key works just like space bar or clicking.
+    if(e.key == 'Enter') {
+      e.preventDefault();
+      this.handleOptionInputChange(e);
+    }
+  },
+  handleNewCategoryInputChange: function(e) {
+    this.setState({
+      newCategoryName: e.target.value
+    });
+  },
+  handleNewCategoryInputKeyDown: function(e) {
+    // Enter key works just like space bar or clicking.
+    if(e.key != 'Enter') {
+      return;
+    }
+    // Close the options.
+    this.handleToggleOptions(e);
+    // Clean the input.
+    var newCategoryName = e.target.value.trim();
+    // Validate that the input has content.
+    if(!newCategoryName.length) {
+      // Reset new category name to previously entered value.
+      this.setState({
+        newCategoryName: this.props.newCategoryName
+      });
+      return;
+    }
+    // Inform the parent component about the change.
+    this.props.onChange({
+      newCategoryName: newCategoryName
+    });
+    // Match internal state to outer state.
+    this.setState({
+      newCategoryName: newCategoryName
+    });
   }
 });
 

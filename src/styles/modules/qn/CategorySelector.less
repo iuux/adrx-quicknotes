@@ -1,6 +1,6 @@
 .qn-CategorySelector {
 
-  &-selected {
+  &-selection {
     background-color: inherit;
     border: 0.1em solid @color-Interactive--400;
     border-radius: 0.25em;
@@ -9,7 +9,7 @@
     padding: 0.5em;
 
     &--unspecified {
-      font-style: italic;
+      .unspecified();
     }
   }
 
@@ -22,25 +22,13 @@
     margin: 0.1em 0 0;
     max-width: 20em;
     padding: 0;
-
-    &--hide {
-      display: none;
-    }
   }
 
   &-legend {
-    display: block;
-    font-weight: bold;
-    margin: 0 0 0.5em;
-    position: absolute;
-    left: -9999em;
+    .screenReadersOnly();
   }
 
   &-option {
-
-    & + & {
-
-    }
 
     &--newCategory {
       border-top: 0.1em solid @color-Interactive--150;
@@ -48,49 +36,40 @@
     }
   }
 
-  &-radioInput {
-    left: 0;
-    position: absolute;
+  &-input {
+    .screenReadersOnly();
 
     &:focus {
       position: absolute;
 
-      + .qn-CategorySelector-radioLabel {
+      + .qn-CategorySelector-label {
         .focus();
       }
     }
-
-    &:checked {
-
-      + .qn-CategorySelector-radioLabel {
-        //background-color: @color-Interactive--150;
-      }
-    }
   }
 
-  &-radioLabel {
+  &-label {
     color: inherit;
     display: flex;
-    padding: 0.5em;
-    text-decoration: none;
-
-    &:hover {
-      background-color: @color-Interactive--100;
-    }
-
-    &--unspecified {
-      color: @color-Text--400;
-      font-style: italic;
-    }
-  }
-
-  &-radioLabelText {
-    flex: 1;
-  }
-
-  &-inputLabel {
-    display: block;
     font-weight: bold;
     padding: 0.5em 0;
+
+    &--unspecified {
+      .unspecified();
+    }
+
+    &--option {
+      font-weight: inherit;
+      padding: 0.5em;
+      text-decoration: none;
+
+      &:hover {
+        background-color: @color-Interactive--100;
+      }
+    }
+
+    &Text {
+      flex: 1;
+    }
   }
 }
