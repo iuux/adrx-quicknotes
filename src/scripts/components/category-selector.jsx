@@ -13,7 +13,7 @@ var CategorySelector = React.createClass({
   ],
   getInitialState: function() {
     return {
-      showOptions: true,
+      showOptions: false,
       newCategoryName: this.props.newCategoryName
     };
   },
@@ -71,23 +71,28 @@ var CategorySelector = React.createClass({
     var newCategoryIcon = isNewCategorySelected ? (<Icon name="check"/>) : null;
 
     return (
-      <fieldset className="qn-CategorySelector-options">
-        <legend className="qn-CategorySelector-legend">Select category</legend>
-        {categoryList}
-        {unspecifiedCategory}
-        <div className="qn-CategorySelector-option qn-CategorySelector-option--newCategory">
-          <label className="qn-CategorySelector-label"
-            htmlFor="newCategoryInput">
-            <span className='qn-CategorySelector-labelText'>New category</span>
-            {newCategoryIcon}
-          </label>
-          <input className="qn-Input" type="text"
-            id="newCategoryInput" ref="newCategoryInput"
-            onChange={this.handleNewCategoryInputChange}
-            onKeyDown={this.handleNewCategoryInputKeyDown}
-            value={this.state.newCategoryName}/>
-        </div>
-      </fieldset>
+      <div>
+        <div className="qn-CategorySelector-backdrop"
+          onClick={this.handleBackdropClick}></div>
+        <fieldset className="qn-CategorySelector-options"
+          onKeyDown={this.handleKeyDown}>
+          <legend className="qn-CategorySelector-legend">Select category</legend>
+          {categoryList}
+          {unspecifiedCategory}
+          <div className="qn-CategorySelector-option qn-CategorySelector-option--newCategory">
+            <label className="qn-CategorySelector-label"
+              htmlFor="newCategoryInput">
+              <span className='qn-CategorySelector-labelText'>New category</span>
+              {newCategoryIcon}
+            </label>
+            <input className="qn-Input" type="text"
+              id="newCategoryInput" ref="newCategoryInput"
+              onChange={this.handleNewCategoryInputChange}
+              onKeyDown={this.handleNewCategoryInputKeyDown}
+              value={this.state.newCategoryName}/>
+          </div>
+        </fieldset>
+      </div>
     );
   },
   renderCategoryInput: function(category) {
@@ -143,6 +148,19 @@ var CategorySelector = React.createClass({
       this.refs.toggleButton.getDOMNode().focus();
     }
   },
+  handleBackdropClick: function(e) {
+    this.handleCancel(e);
+  },
+  handleKeyDown: function(e) {
+    if(e.key == 'Escape') {
+      this.handleCancel(e);
+    }
+  },
+  handleCancel: function(e) {
+    // Cancel any changes and close.
+    this.handleToggleOptions(e);
+    this.revert();
+  },
   handleOptionInputChange: function(e) {
     // Close the options.
     this.handleToggleOptions(e);
@@ -178,10 +196,7 @@ var CategorySelector = React.createClass({
     var newCategoryName = e.target.value.trim();
     // Validate that the input has content.
     if(!newCategoryName.length) {
-      // Reset new category name to previously entered value.
-      this.setState({
-        newCategoryName: this.props.newCategoryName
-      });
+      this.revert();
       return;
     }
     // Inform the parent component about the change.
@@ -191,6 +206,12 @@ var CategorySelector = React.createClass({
     // Match internal state to outer state.
     this.setState({
       newCategoryName: newCategoryName
+    });
+  },
+  revert: function() {
+    // Reset new category name to previously entered value.
+    this.setState({
+      newCategoryName: this.props.newCategoryName
     });
   }
 });

@@ -17,11 +17,26 @@
     margin-left: 1em;
   }
 
+  &-backdrop {
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1;
+  }
+
   &-options {
+    .shadow(2);
+    background-color: @color-White;
     border: 0.1em solid @color-Interactive--400;
+    display: block;
     margin: 0.1em 0 0;
     max-width: 20em;
+    min-width: 15em;
     padding: 0;
+    position: absolute;
+    z-index: 1;
   }
 
   &-legend {
