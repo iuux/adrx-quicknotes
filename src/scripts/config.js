@@ -1,0 +1,7 @@
+'use strict';
+
+module.exports = {
+  CATEGORY_NAME_MAXLENGTH: 30,
+  NOTE_TITLE_MAXLENGTH: 30,
+  NOTE_NOTE_MAXLENGTH: 500
+};

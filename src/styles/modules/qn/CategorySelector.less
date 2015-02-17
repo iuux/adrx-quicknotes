@@ -1,0 +1,90 @@
+.qn-CategorySelector {
+
+  &-selection {
+    background-color: inherit;
+    border: 0.1em solid @color-Interactive--400;
+    border-radius: 0.25em;
+    cursor: pointer;
+    display: inline-block;
+    padding: 0.5em;
+
+    &--unspecified {
+      .unspecified();
+    }
+  }
+
+  &-icon {
+    margin-left: 1em;
+  }
+
+  &-backdrop {
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1;
+  }
+
+  &-options {
+    .shadow(2);
+    background-color: @color-White;
+    border: 0.1em solid @color-Interactive--400;
+    display: block;
+    margin: 0.1em 0 0;
+    max-width: 20em;
+    min-width: 15em;
+    padding: 0;
+    position: absolute;
+    z-index: 1;
+  }
+
+  &-legend {
+    .screenReadersOnly();
+  }
+
+  &-option {
+
+    &--newCategory {
+      border-top: 0.1em solid @color-Interactive--150;
+      padding: 0 0.5em 0.5em;
+    }
+  }
+
+  &-input {
+    .screenReadersOnly();
+
+    &:focus {
+      position: absolute;
+
+      + .qn-CategorySelector-label {
+        .focus();
+      }
+    }
+  }
+
+  &-label {
+    color: inherit;
+    display: flex;
+    font-weight: bold;
+    padding: 0.5em 0;
+
+    &--unspecified {
+      .unspecified();
+    }
+
+    &--option {
+      font-weight: inherit;
+      padding: 0.5em;
+      text-decoration: none;
+
+      &:hover {
+        background-color: @color-Interactive--100;
+      }
+    }
+
+    &Text {
+      flex: 1;
+    }
+  }
+}

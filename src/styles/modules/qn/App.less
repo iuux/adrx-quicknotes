@@ -1,5 +1,16 @@
 .qn-App {
   border: 0.1em solid @color-Border;
+  color: @color-Text--900;
+  line-height: 1;
+  margin: 5%;
+
+  :focus {
+    .focus();
+  }
+
+  ::selection {
+    background-color: @color-Interactive--150;
+  }
 
   &-body {
     display: flex;

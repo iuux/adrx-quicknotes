@@ -1,20 +1,24 @@
 var gulp = require('gulp');
-var merge = require('merge-stream');
+var browserify = require('browserify');
+var reactify = require('reactify');
+var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
-var order = require('gulp-order');
-var concat = require('gulp-concat');
-//var gzip = require('gulp-gzip');
+var uglify = require('gulp-uglify');
+var gzip = require('gulp-gzip');
 
-var browserify = require('./browserify');
-var templates = require('./templates');
+var bundler = browserify({
+  entries: ['./src/scripts/main.jsx'],
+  transform: [reactify],
+  extensions: ['.jsx'],
+  debug: true
+});
 
 gulp.task('scripts', function() {
-  return merge(browserify(), templates())
-    // Buffer until gulp-concat supports streams.
-    // https://github.com/wearefractal/gulp-concat/issues/38
+  return bundler.bundle()
+    .pipe(source('scripts.js'))
+    .pipe(gulp.dest('./build'))
     .pipe(buffer())
-    .pipe(order(['bundle.js']))
-    .pipe(concat('scripts.js'))
-    //.pipe(gzip())
+    .pipe(uglify())
+    .pipe(gzip())
     .pipe(gulp.dest('./build'));
 });
