@@ -7,6 +7,8 @@ var categoryStore = require('../stores/category');
 var actions = require('../actions');
 var config = require('../config');
 
+var Alert = require('./Alert');
+
 var EditCategory = React.createClass({
   mixins: [
     Router.Navigation,
@@ -40,9 +42,15 @@ var EditCategory = React.createClass({
     var submitButtonLabel = this.state.requesting ? 'Renaming' : 'Rename';
     var processIndicator = this.state.requesting ? (<span className="qn-ProcessIndicator"/>) : null;
 
+    var hasError = true;
+    var error = !hasError ? null : (
+      <Alert type="error" message="Could not rename category."/>
+    );
+
     return (
       <form className="qn-Content" onSubmit={this.onSubmit}>
         <h2 className="qn-Content-heading">Edit category</h2>
+        {error}
         <label className="qn-Label" for="qn-Input">Name</label>
         <input className="qn-Input" id="qn-Input" type="text" required
           ref="qnInput" autoFocus
