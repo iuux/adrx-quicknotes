@@ -21,41 +21,9 @@ var App = React.createClass({
       return null;
     }
 
-    function renderSection(section) {
-      return section.map(function(category) {
-
-        var notes = category.notes.map(function(note) {
-          return (
-            <Link to="note.edit" params={{id: note.id}}
-              className="qn-Nav-item"
-              activeClassName="qn-Nav-item--active">{note.title}</Link>
-          );
-        });
-
-        // A category is editable if it has an id.
-        var categoryName = !category.id ? category.name : (
-          <Link to="category.edit" params={{id: category.id}}
-            className="qn-Nav-item"
-            activeClassName="qn-Nav-item--active">{category.name}</Link>
-        );
-
-        var navHeadingClasses = cx({
-          'qn-Nav-heading': true,
-          'qn-Nav-heading--unspecified': !category.id
-        });
-
-        return (
-          <div>
-            <h2 className={navHeadingClasses}>{categoryName}</h2>
-            {notes}
-          </div>
-        );
-      });
-    }
-
     // Render categorized notes.
-    var categorizedSection = renderSection(data.categorized);
-    var uncategorizedSection = renderSection([data.uncategorized]);
+    var categorizedSection = this.renderSection(data.categorized);
+    var uncategorizedSection = this.renderSection([data.uncategorized]);
 
     return (
       <section className="qn-App">
@@ -76,6 +44,37 @@ var App = React.createClass({
         </div>
       </section>
     );
+  },
+  renderSection: function(section) {
+    return section.map(function(category) {
+
+      var notes = category.notes.map(function(note) {
+        return (
+          <Link to="note.edit" params={{id: note.id}}
+            className="qn-Nav-item"
+            activeClassName="qn-Nav-item--active">{note.title}</Link>
+        );
+      });
+
+      // A category is editable if it has an id.
+      var categoryName = !category.id ? category.name : (
+        <Link to="category.edit" params={{id: category.id}}
+          className="qn-Nav-item"
+          activeClassName="qn-Nav-item--active">{category.name}</Link>
+      );
+
+      var navHeadingClasses = cx({
+        'qn-Nav-heading': true,
+        'qn-Nav-heading--unspecified': !category.id
+      });
+
+      return (
+        <div>
+          <h2 className={navHeadingClasses}>{categoryName}</h2>
+          {notes}
+        </div>
+      );
+    });
   }
 });
 
