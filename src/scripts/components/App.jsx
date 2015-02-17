@@ -1,6 +1,7 @@
 'use strict';
 
 var React = require('react');
+var cx = React.addons.classSet;
 var Reflux = require('reflux');
 var Router = require('react-router');
 var Link = Router.Link;
@@ -19,8 +20,6 @@ var App = React.createClass({
     if( !data ) {
       return null;
     }
-
-    var cx = React.addons.classSet;
 
     function renderSection(section) {
       return section.map(function(category) {
