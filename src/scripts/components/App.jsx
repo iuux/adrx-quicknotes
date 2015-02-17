@@ -31,7 +31,8 @@ var App = React.createClass({
           <h1 className="qn-Header-heading">
             <Link to="home">Quick Notes</Link>
           </h1>
-          <Link to="note.new" className="qn-Button">New Quick Note</Link>
+          <Link to="note.new" className="qn-Button"
+            activeClassName="qn-Button--disabled">New Quick Note</Link>
         </header>
         <div className="qn-App-body">
           <nav className="qn-App-nav qn-Nav">
