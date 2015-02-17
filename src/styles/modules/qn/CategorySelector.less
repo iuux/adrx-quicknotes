@@ -1,19 +1,33 @@
 .qn-CategorySelector {
 
   &-selection {
-    background-color: inherit;
-    border: 0.1em solid @color-Interactive--400;
+    background-color: @color-Interactive--100;
+    border: unit(1/16, em) solid @color-Interactive--400;
     border-radius: 0.25em;
+    color: @color-Interactive--750;
     cursor: pointer;
-    display: inline-block;
+    display: flex;
     padding: 0.5em;
+    min-width: 20em;
+    text-align: left;
+    text-shadow: 0 unit(1/16, em) 0 @color-White;
+
+    &--open {
+      border-radius: 0.25em 0.25em 0 0;
+    }
 
     &--unspecified {
-      .unspecified();
+      color: @color-Interactive--750;
+      font-style: italic;
+    }
+
+    &Text {
+      flex: 1;
     }
   }
 
   &-icon {
+    fill: @color-Interactive--750;
     margin-left: 1em;
   }
 
@@ -27,13 +41,13 @@
   }
 
   &-options {
-    .shadow(2);
+    .shadow();
     background-color: @color-White;
     border: 0.1em solid @color-Interactive--400;
+    box-sizing: border-box;
     display: block;
-    margin: 0.1em 0 0;
-    max-width: 20em;
-    min-width: 15em;
+    margin: unit(-1/16, em) 0 0;
+    min-width: 20em;
     padding: 0;
     position: absolute;
     z-index: 1;
@@ -46,13 +60,20 @@
   &-option {
 
     &--newCategory {
-      border-top: 0.1em solid @color-Interactive--150;
+      border-top: unit(1/16, em) solid @color-Interactive--150;
       padding: 0 0.5em 0.5em;
     }
   }
 
   &-input {
     .screenReadersOnly();
+
+    &:checked {
+
+      + .qn-CategorySelector-label {
+        background-color: @color-Interactive--100;
+      }
+    }
 
     &:focus {
       position: absolute;
@@ -68,9 +89,11 @@
     display: flex;
     font-weight: bold;
     padding: 0.5em 0;
+    text-shadow: 0 unit(1/16, em) 0 @color-White;
 
     &--unspecified {
-      .unspecified();
+      color: @color-Text--900;
+      font-style: italic;
     }
 
     &--option {

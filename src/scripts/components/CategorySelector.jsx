@@ -6,6 +6,7 @@ var Reflux = require('reflux');
 
 var categorizedNotesStore = require('../stores/categorizedNotes');
 var Icon = require('./icon');
+var config = require('../config');
 
 var CategorySelector = React.createClass({
   mixins: [
@@ -23,6 +24,7 @@ var CategorySelector = React.createClass({
 
     var selectionClasses = cx({
       'qn-CategorySelector-selection': true,
+      'qn-CategorySelector-selection--open': this.state.showOptions,
       'qn-CategorySelector-selection--unspecified': isUncategoriedSelected
     });
 
@@ -52,7 +54,7 @@ var CategorySelector = React.createClass({
         <button className={selectionClasses}
           ref="toggleButton" id="toggleButton"
           onClick={this.handleToggleOptions}>
-          {selectedName}
+          <span className="qn-CategorySelector-selectionText">{selectedName}</span>
           <Icon name="caret-bottom" className="qn-CategorySelector-icon"/>
         </button>
         {options}
@@ -87,6 +89,7 @@ var CategorySelector = React.createClass({
             </label>
             <input className="qn-Input" type="text"
               id="newCategoryInput" ref="newCategoryInput"
+              maxLength={config.CATEGORY_NAME_MAXLENGTH}
               onChange={this.handleNewCategoryInputChange}
               onKeyDown={this.handleNewCategoryInputKeyDown}
               value={this.state.newCategoryName}/>
