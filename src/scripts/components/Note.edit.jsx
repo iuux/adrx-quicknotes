@@ -12,7 +12,8 @@ var CategorySelector = require('./CategorySelector');
 var EditNote = React.createClass({
   mixins: [
     Router.Navigation,
-    Reflux.listenTo(noteStore, 'onStoreChange')
+    Reflux.listenTo(noteStore, 'onStoreChange'),
+    Reflux.listenToMany(actions)
   ],
   statics: {
     // Get the note by its id when transitioning to this component.
@@ -40,6 +41,10 @@ var EditNote = React.createClass({
 
     this.checkValidity();
 
+    var isSubmitDisabled = this.isInvalid || this.state.requesting;
+    var submitButtonLabel = this.state.requesting ? 'Saving' : 'Save';
+    var processIndicator = this.state.requesting ? (<span className="qn-ProcessIndicator"/>) : null;
+
     return (
       <form className="qn-Content" onSubmit={this.handleSubmit}>
         <h2 className="qn-Content-heading">Edit Quick Note</h2>
@@ -48,19 +53,24 @@ var EditNote = React.createClass({
           ref="qnInput" autoFocus
           maxLength={config.NOTE_TITLE_MAXLENGTH}
           value={this.state.title}
-          onChange={this.handleTitleInputChange}/>
+          onChange={this.handleTitleInputChange}
+          disabled={this.state.requesting}/>
         <CategorySelector
           selectedCategoryId={this.state.categoryId}
           newCategoryName={this.state.newCategoryName}
-          onChange={this.handleCategorySelectorChange}/>
+          onChange={this.handleCategorySelectorChange}
+          disabled={this.state.requesting}/>
         <label className="qn-Label" htmlFor="qn-Note">Note</label>
         <textarea className="qn-Input qn-Input--textarea" id="qn-Note" required
           maxLength={config.NOTE_NOTE_MAXLENGTH}
           value={this.state.note}
-          onChange={this.handleNoteInputChange}></textarea>
+          onChange={this.handleNoteInputChange}
+          disabled={this.state.requesting}></textarea>
         <div className="qn-ActionBar">
           <button className="qn-ActionBar-item qn-Button qn-Button--primary" type="submit"
-            disabled={this.isInvalid}>Save</button>
+            disabled={isSubmitDisabled}>
+            {submitButtonLabel}
+            {processIndicator}</button>
           <button className="qn-ActionBar-item qn-Button"
             onClick={this.handleCancel}>Cancel</button>
         </div>
@@ -68,15 +78,19 @@ var EditNote = React.createClass({
     );
   },
   checkValidity: function() {
-    var hasInput, diff;
+    var hasInput, inputDiff, catDiff;
     // Fields need input, not including whitespace.
     hasInput = !!(this.state.title).trim().length;
     hasInput &= !!(this.state.note).trim().length;
     // Input is different than source data.
-    diff = this.state.title !== this.sourceState.title;
-    diff |= this.state.note !== this.sourceState.note;
+    inputDiff = this.state.title !== this.sourceState.title;
+    inputDiff |= this.state.note !== this.sourceState.note;
+    // Category is different than source data.
+    catDiff =  !!this.state.newCategoryName && !!this.state.newCategoryName.length;
+    catDiff |= this.state.categoryId !== this.sourceState.categoryId;
     // Combine validity checks.
-    this.isValid = hasInput && diff;
+    // Valid means there are differences which can be saved.
+    this.isValid = hasInput && (inputDiff || catDiff);
     this.isInvalid = !this.isValid;
   },
   handleTitleInputChange: function(e) {
@@ -89,7 +103,6 @@ var EditNote = React.createClass({
       categoryId: e.categoryId,
       newCategoryName: e.newCategoryName || null
     });
-    console.log('cat select change', e);
   },
   handleNoteInputChange: function(e) {
     this.setState({
@@ -99,7 +112,12 @@ var EditNote = React.createClass({
   handleSubmit: function(e) {
     e.preventDefault();
     actions.updateNote(this.sourceState.id, this.state);
-    this.onCancel();
+    this.setState({
+      requesting: true
+    });
+  },
+  onUpdateNoteSucceeded: function(id) {
+    this.handleCancel();
   },
   handleCancel: function() {
     this.transitionTo('home');

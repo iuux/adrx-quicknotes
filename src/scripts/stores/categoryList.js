@@ -5,14 +5,26 @@ var request = require('superagent');
 
 var data = require('./categoryList.json');
 var actions = require('../actions');
+var mixins = require('./mixins');
 
 var categoriesStore = Reflux.createStore({
+  mixins: [mixins],
   listenables: actions,
   init: function() {
     this.data = data;
   },
   getInitialState: function() {
     return this.data;
+  },
+  onCreateCategory: function(name, callback) {
+    var uuid = this.guid();
+    var category = {
+      id: uuid,
+      name: name
+    };
+    this.data[uuid] = category;
+    callback(category);
+    this.output();
   },
   onRenameCategory: function(id, name) {
     // Retain source.

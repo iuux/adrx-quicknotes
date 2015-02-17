@@ -53,6 +53,7 @@ var CategorySelector = React.createClass({
         <label className="qn-Label" htmlFor="toggleButton">Category</label>
         <button className={selectionClasses}
           ref="toggleButton" id="toggleButton"
+          disabled={this.props.disabled}
           onClick={this.handleToggleOptions}>
           <span className="qn-CategorySelector-selectionText">{selectedName}</span>
           <Icon name="caret-bottom" className="qn-CategorySelector-icon"/>
@@ -171,8 +172,9 @@ var CategorySelector = React.createClass({
     // Close the options.
     this.handleToggleOptions(e);
     // Inform the parent component about the change.
+    var categoryId = e.target.value == "0" ? 0 : e.target.value;
     this.props.onChange({
-      categoryId: parseInt(e.target.value)
+      categoryId: categoryId
     });
     // Clear new category name input value.
     this.setState({
