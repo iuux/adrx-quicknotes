@@ -7,7 +7,7 @@ var noteStore = require('../stores/note');
 var actions = require('../actions');
 var config = require('../config');
 
-var CategorySelector = require('./category-selector');
+var CategorySelector = require('./CategorySelector');
 
 var EditNote = React.createClass({
   mixins: [

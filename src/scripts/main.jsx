@@ -5,11 +5,11 @@ var Router = require('react-router');
 var Route = Router.Route;
 var DefaultRoute = Router.DefaultRoute;
 
-var App = require('./components/app');
-var Home = require('./components/home');
-var EditCategory = require('./components/category.edit');
-var NewNote = require('./components/note.new');
-var EditNote = require('./components/note.edit');
+var App = require('./components/App');
+var Home = require('./components/Home');
+var EditCategory = require('./components/Category.edit');
+var NewNote = require('./components/Note.new');
+var EditNote = require('./components/Note.edit');
 
 var routes = (
   <Route handler={App}>
