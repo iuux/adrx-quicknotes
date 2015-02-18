@@ -38,6 +38,14 @@ var EditCategory = React.createClass({
 
     this.checkValidity();
 
+    return (
+      <div>
+        {this.renderRenameCategoryForm()}
+        {this.renderDeleteCategoryForm()}
+      </div>
+    );
+  },
+  renderRenameCategoryForm: function() {
     var isSubmitDisabled = this.isInvalid;
     var submitButtonLabel = this.state.requesting ? 'Renaming' : 'Rename';
     var processIndicator = this.state.requesting ? (<span className="qn-ProcessIndicator"/>) : null;
@@ -50,10 +58,10 @@ var EditCategory = React.createClass({
     var isFormDisabled = false;
 
     return (
-      <form className="qn-Content" onSubmit={this.handleSubmit}>
+      <form className="qn-Content" onSubmit={this.handleRename}>
         <h2 className="qn-Content-heading">Edit category</h2>
-        {error}
         <fieldset disabled={isFormDisabled}>
+          {error}
           <label className="qn-Label" for="qn-Input">Name</label>
           <input className="qn-Input" id="qn-Input" type="text" required
             ref="qnInput" autoFocus
@@ -73,6 +81,19 @@ var EditCategory = React.createClass({
       </form>
     );
   },
+  renderDeleteCategoryForm: function() {
+    var isFormDisabled = false;
+
+    return (
+      <form className="qn-Content" onSubmit={this.handleDelete}>
+        <h2 className="qn-Content-heading">Delete category</h2>
+        <p className="qn-Content-paragraph">Delete category?</p>
+        <div className="qn-ActionBar">
+          <button className="qn-ActionBar-item qn-Button" type="submit">Delete</button>
+        </div>
+      </form>
+    );
+  },
   checkValidity: function() {
     var hasInput, diff;
     // Fields need input, not including whitespace.
@@ -88,24 +109,31 @@ var EditCategory = React.createClass({
       name: e.target.value
     });
   },
-  handleSubmit: function(e) {
+  handleRename: function(e) {
     e.preventDefault();
     actions.renameCategory(this.sourceState.id, this.state.name);
     this.setState({
       requesting: true
     });
   },
-  handleCancel: function() {
-    this.transitionTo('home');
-  },
   onRenameCategorySucceeded: function(id) {
-    this.onCancel();
+    this.handleCancel();
   },
   onRenameCategoryFailed: function(id, sourceName, newName) {
     this.setState({
       requesting: false
     });
-  }
+  },
+  handleDelete: function(e) {
+    e.preventDefault();
+    actions.deleteCategory(this.sourceState.id);
+  },
+  onDeleteCategorySucceeded: function(id) {
+    this.handleCancel();
+  },
+  handleCancel: function() {
+    this.transitionTo('home');
+  },
 });
 
 module.exports = EditCategory;

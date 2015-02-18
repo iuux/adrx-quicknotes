@@ -70,8 +70,26 @@ var quickNotesStore = Reflux.createStore({
   },
   renameCategory: function(id, name) {
     this.data.categoryList[id].name = name;
-    this.output();
     actions.renameCategorySucceeded(id);
+    this.output();
+  },
+  onDeleteCategory: function(id) {
+    // Convert notes list to array.
+    this.objectToArray(this.data.noteList)
+      // Find all notes within the given category.
+      .filter(function(note) {
+        return note.categoryId == id;
+      })
+      // Delete all notes within the given category.
+      .forEach(function(note) {
+        this.deleteNote(note.id);
+      }.bind(this));
+
+    // Delete the category.
+    delete this.data.categoryList[id];
+
+    actions.deleteCategorySucceeded(id);
+    this.output();
   },
   //
   // Notes
@@ -98,13 +116,16 @@ var quickNotesStore = Reflux.createStore({
   },
   updateNote: function(id, note) {
     this.data.noteList[id] = note;
-    this.output();
     actions.updateNoteSucceeded(note);
+    this.output();
   },
   onDeleteNote: function(id) {
-    delete this.data.noteList[id];
-    this.output();
+    this.deleteNote(id);
     actions.deleteNoteSucceeded(id);
+    this.output();
+  },
+  deleteNote: function(id) {
+    delete this.data.noteList[id];
   },
   output: function() {
     this.trigger(this.data);
