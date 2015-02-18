@@ -48,7 +48,7 @@ var EditCategory = React.createClass({
     );
 
     return (
-      <form className="qn-Content" onSubmit={this.onSubmit}>
+      <form className="qn-Content" onSubmit={this.handleSubmit}>
         <h2 className="qn-Content-heading">Edit category</h2>
         {error}
         <label className="qn-Label" for="qn-Input">Name</label>
@@ -56,7 +56,7 @@ var EditCategory = React.createClass({
           ref="qnInput" autoFocus
           maxLength={config.CATEGORY_NAME_MAXLENGTH}
           value={this.state.name}
-          onChange={this.onNameInputChange}
+          onChange={this.handleNameInputChange}
           disabled={this.state.requesting}/>
         <div className="qn-ActionBar">
           <button className="qn-ActionBar-item qn-Button" type="submit"
@@ -64,7 +64,7 @@ var EditCategory = React.createClass({
             {submitButtonLabel}
             {processIndicator}</button>
           <button className="qn-ActionBar-item qn-Button"
-            onClick={this.onCancel}>Cancel</button>
+            onClick={this.handleCancel}>Cancel</button>
         </div>
       </form>
     );
@@ -79,19 +79,19 @@ var EditCategory = React.createClass({
     this.isValid = hasInput && diff;
     this.isInvalid = !this.isValid;
   },
-  onNameInputChange: function(e) {
+  handleNameInputChange: function(e) {
     this.setState({
       name: e.target.value
     });
   },
-  onSubmit: function(e) {
+  handleSubmit: function(e) {
     e.preventDefault();
     actions.renameCategory(this.sourceState.id, this.state.name);
     this.setState({
       requesting: true
     });
   },
-  onCancel: function() {
+  handleCancel: function() {
     this.transitionTo('home');
   },
   onRenameCategorySucceeded: function(id) {
