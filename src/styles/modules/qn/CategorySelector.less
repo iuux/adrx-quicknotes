@@ -1,6 +1,7 @@
 .qn-CategorySelector {
 
   &-selection {
+    .textShadow();
     background-color: @color-Interactive--100;
     border: unit(1/16, em) solid @color-Interactive--400;
     border-radius: 0.25em;
@@ -10,7 +11,6 @@
     padding: 0.5em;
     min-width: 20em;
     text-align: left;
-    text-shadow: 0 unit(1/16, em) 0 @color-White;
 
     &--open {
       border-radius: 0.25em 0.25em 0 0;
@@ -98,11 +98,11 @@
   }
 
   &-label {
+    .textShadow();
     color: inherit;
     display: flex;
     font-weight: bold;
     padding: 0.5em 0;
-    text-shadow: 0 unit(1/16, em) 0 @color-White;
 
     &--unspecified {
       color: @color-Text--900;

@@ -1,4 +1,5 @@
 .qn-Button {
+  .textShadow();
   background-color: @color-Interactive--150;
   border: unit(2/16, em) solid @color-Interactive--400;
   border-radius: 0.25em;
@@ -6,13 +7,12 @@
   padding: unit(10/16, em);
   position: relative;
   text-decoration: none;
-  text-shadow: 0 unit(1/16, em) 0 @color-White;
 
   &:hover,
   &:focus {
+    .textShadow(@color-Interactive--750);
     background-color: @color-Interactive--400;
     color: @color-White;
-    text-shadow: 0 unit(1/16, em) 0 @color-Interactive--750;
   }
 
   &:active {
@@ -52,10 +52,10 @@
     &,
     &:hover,
     &:focus {
+      .textShadow();
       background-color: @color-Interactive--100;
       border-color: @color-Interactive--150;
       color: @color-Interactive--400;
-      text-shadow: 0 unit(1/16, em) 0 @color-White;
     }
 
     &:active {
