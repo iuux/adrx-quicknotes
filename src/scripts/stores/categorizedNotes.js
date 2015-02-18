@@ -49,11 +49,6 @@ var categorizedNotesStore = Reflux.createStore({
     // Convert object to array.
     var categorizedNotes = this.objectToArray(categories);
 
-    // Remove categories without any notes.
-    var categorizedNotes = categorizedNotes.filter(function(category) {
-      return !!category.notes.length;
-    });
-
     // Sorting functions.
     function sortNotesByTitle(a, b) {
       return a.title > b.title;
