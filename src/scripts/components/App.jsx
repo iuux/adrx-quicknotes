@@ -23,7 +23,9 @@ var App = React.createClass({
 
     // Render categorized notes.
     var categorizedSection = this.renderSection(data.categorized);
-    var uncategorizedSection = this.renderSection([data.uncategorized]);
+    // Only render uncategorized notes section if there are child notes.
+    var hasUncategorizedNotes = !!data.uncategorized.notes.length;
+    var uncategorizedSection = hasUncategorizedNotes ? this.renderSection([data.uncategorized]) : null;
 
     return (
       <section className="qn-App">
