@@ -73,6 +73,8 @@ var EditNote = React.createClass({
               {submitButtonLabel}
               {processIndicator}</button>
             <button className="qn-ActionBar-item qn-Button"
+              onClick={this.handleDelete}>Delete</button>
+            <button className="qn-ActionBar-item qn-Button"
               onClick={this.handleCancel}>Cancel</button>
           </div>
         </fieldset>
@@ -119,6 +121,13 @@ var EditNote = React.createClass({
     });
   },
   onUpdateNoteSucceeded: function(id) {
+    this.handleCancel();
+  },
+  handleDelete: function(e) {
+    e.preventDefault();
+    actions.deleteNote(this.sourceState.id);
+  },
+  onDeleteNoteSucceeded: function(id) {
     this.handleCancel();
   },
   handleCancel: function() {

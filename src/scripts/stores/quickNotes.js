@@ -101,6 +101,11 @@ var quickNotesStore = Reflux.createStore({
     this.output();
     actions.updateNoteSucceeded(note);
   },
+  onDeleteNote: function(id) {
+    delete this.data.noteList[id];
+    this.output();
+    actions.deleteNoteSucceeded(id);
+  },
   output: function() {
     this.trigger(this.data);
   }
