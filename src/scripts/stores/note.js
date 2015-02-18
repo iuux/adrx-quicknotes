@@ -2,13 +2,13 @@
 
 var Reflux = require('reflux');
 
-var noteListStore = require('./noteList');
+var quickNotesStore = require('./quickNotes');
 var actions = require('../actions');
 
 var noteStore = Reflux.createStore({
   listenables: actions,
   onGetNote: function(id) {
-    var note = noteListStore.data[id];
+    var note = quickNotesStore.data.noteList[id];
     this.trigger(note);
   }
 });

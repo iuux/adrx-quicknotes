@@ -2,13 +2,13 @@
 
 var Reflux = require('reflux');
 
-var categoryListStore = require('./categoryList');
+var quickNotesStore = require('./quickNotes');
 var actions = require('../actions');
 
 var categoryStore = Reflux.createStore({
   listenables: actions,
   onGetCategory: function(id) {
-    var category = categoryListStore.data[id];
+    var category = quickNotesStore.data.categoryList[id];
     this.trigger(category);
   }
 });

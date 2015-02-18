@@ -3,11 +3,11 @@
 var Reflux = require('reflux');
 var request = require('superagent');
 
-var data = require('./categoryList.json');
+var data = require('./quickNotes.json');
 var actions = require('../actions');
 var mixins = require('./mixins');
 
-var categoriesStore = Reflux.createStore({
+var quickNotesStore = Reflux.createStore({
   mixins: [mixins],
   listenables: actions,
   init: function() {
@@ -16,25 +16,26 @@ var categoriesStore = Reflux.createStore({
   getInitialState: function() {
     return this.data;
   },
-  onCreateCategory: function(name, callback) {
+  //
+  // Categories
+  //
+  createCategory: function(name, callback) {
     var uuid = this.guid();
     var category = {
       id: uuid,
       name: name
     };
-    this.data[uuid] = category;
+    this.data.categoryList[uuid] = category;
     callback(category);
-    this.output();
   },
   onRenameCategory: function(id, name) {
     // Retain source.
-    var _name = this.data[id].name;
+    //var _name = this.data.categoryList[id].name;
     // Clean input.
     name = name.trim();
     // Simulate long request.
     setTimeout(function() {
-      actions.renameCategorySucceeded(id);
-      this._renameCategory(id, name);
+      this.renameCategory(id, name);
       //actions.renameCategoryFailed(id, _name, name);
     }.bind(this), 4000);
   },
@@ -62,18 +63,47 @@ var categoriesStore = Reflux.createStore({
         // Update failed. Revert changes.
         if(err || !res.ok) {
           console.log('Update failed. Reverting to', _name);
-          this._renameCategory(id, _name);
+          this.renameCategory(id, _name);
           actions.renameCategoryFailed(id, _name, name);
         }
       }.bind(this));
   },
-  _renameCategory: function(id, name) {
-    this.data[id].name = name;
+  renameCategory: function(id, name) {
+    this.data.categoryList[id].name = name;
     this.output();
+    actions.renameCategorySucceeded(id);
+  },
+  //
+  // Notes
+  //
+  onUpdateNote: function(id, note) {
+    // Clean input.
+    note.id = id;
+    note.title = note.title.trim();
+    note.note = note.note.trim();
+    // Create category, if needed.
+    var shouldCreateNewCategory = !!note.newCategoryName && !!note.newCategoryName.length;
+    // Simulate long request.
+    setTimeout(function() {
+      if(shouldCreateNewCategory) {
+        this.createCategory(note.newCategoryName, function(category) {
+          note.categoryId = category.id;
+          this.updateNote(id, note);
+        }.bind(this));
+      }
+      else {
+        this.updateNote(id, note);
+      }
+    }.bind(this), 4000);
+  },
+  updateNote: function(id, note) {
+    this.data.noteList[id] = note;
+    this.output();
+    actions.updateNoteSucceeded(note);
   },
   output: function() {
     this.trigger(this.data);
   }
 });
 
-module.exports = categoriesStore;
+module.exports = quickNotesStore;
