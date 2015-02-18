@@ -1,34 +1,106 @@
 'use strict';
 
 var React = require('react');
+var Router = require('react-router');
 
+var noteStore = require('../stores/note');
+var actions = require('../actions');
 var config = require('../config');
 
+var CategorySelector = require('./CategorySelector');
+
 var NewNote = React.createClass({
+  mixins: [
+    Router.Navigation,
+    Reflux.listenToMany(actions)
+  ],
+  getInitialState: function() {
+    return {
+      title: '',
+      categoryId: 0,
+      newCategoryName: '',
+      note: ''
+    };
+  },
   render: function() {
+    this.checkValidity();
+
+    var isSubmitDisabled = this.isInvalid;
+    var submitButtonLabel = this.state.requesting ? 'Saving' : 'Save';
+    var processIndicator = this.state.requesting ? (<span className="qn-ProcessIndicator"/>) : null;
+
+    var isFormDisabled = this.state.requesting;
+
     return (
-      <section className="qn-Content">
+      <form className="qn-Content" onSubmit={this.handleSubmit}>
         <h2 className="qn-Content-heading">New Quick Note</h2>
-        <form>
+        <fieldset disabled={isFormDisabled}>
           <label className="qn-Label" htmlFor="qn-Input">Title</label>
           <input className="qn-Input" id="qn-Input" type="text" required
-            autoFocus
-            maxLength={config.NOTE_TITLE_MAXLENGTH}/>
-          <label className="qn-Label" htmlFor="qn-Category">Category</label>
-          <select id="qn-Category">
-            <option>One</option>
-            <option>Two</option>
-          </select>
+            ref="qnInput" autoFocus
+            maxLength={config.NOTE_TITLE_MAXLENGTH}
+            value={this.state.title}
+            onChange={this.handleTitleInputChange}/>
+          <CategorySelector
+            selectedCategoryId={this.state.categoryId}
+            newCategoryName={this.state.newCategoryName}
+            onChange={this.handleCategorySelectorChange}
+            disabled={isFormDisabled}/>
           <label className="qn-Label" htmlFor="qn-Note">Note</label>
           <textarea className="qn-Input qn-Input--textarea" id="qn-Note" required
-            maxLength={config.NOTE_NOTE_MAXLENGTH}></textarea>
+            maxLength={config.NOTE_NOTE_MAXLENGTH}
+            value={this.state.note}
+            onChange={this.handleNoteInputChange}></textarea>
           <div className="qn-ActionBar">
-            <button className="qn-ActionBar-item qn-Button qn-Button--primary">Save</button>
-            <button className="qn-ActionBar-item qn-Button">Cancel</button>
+            <button className="qn-ActionBar-item qn-Button qn-Button--primary" type="submit"
+              disabled={isSubmitDisabled}>
+              {submitButtonLabel}
+              {processIndicator}</button>
+            <button className="qn-ActionBar-item qn-Button"
+              onClick={this.handleCancel}>Cancel</button>
           </div>
-        </form>
-      </section>
+        </fieldset>
+      </form>
     );
+  },
+  checkValidity: function() {
+    var hasInput, inputDiff, catDiff;
+    // Fields need input, not including whitespace.
+    hasInput = !!(this.state.title).trim().length;
+    hasInput &= !!(this.state.note).trim().length;
+    // Combine validity checks.
+    // Valid means there are differences which can be saved.
+    this.isValid = hasInput;
+    this.isInvalid = !this.isValid;
+  },
+  handleTitleInputChange: function(e) {
+    this.setState({
+      title: e.target.value
+    });
+  },
+  handleCategorySelectorChange: function(e) {
+    this.setState({
+      categoryId: e.categoryId,
+      newCategoryName: e.newCategoryName || null
+    });
+  },
+  handleNoteInputChange: function(e) {
+    this.setState({
+      note: e.target.value
+    });
+  },
+  handleSubmit: function(e) {
+    e.preventDefault();
+    actions.createNote(this.state);
+    this.setState({
+      requesting: true
+    });
+  },
+  onCreateNoteSucceeded: function(note) {
+    this.handleCancel();
+  },
+  handleCancel: function() {
+    this.transitionTo('home');
   }
 });
 

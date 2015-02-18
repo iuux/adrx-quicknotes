@@ -94,6 +94,31 @@ var quickNotesStore = Reflux.createStore({
   //
   // Notes
   //
+  onCreateNote: function(note) {
+    note.title = note.title.trim();
+    note.note = note.note.trim();
+    // Create category, if needed.
+    var shouldCreateNewCategory = !!note.newCategoryName && !!note.newCategoryName.length;
+    // Simulate long request.
+    setTimeout(function() {
+      if(shouldCreateNewCategory) {
+        this.createCategory(note.newCategoryName, function(category) {
+          note.categoryId = category.id;
+          this.createNote(note);
+        }.bind(this));
+      }
+      else {
+        this.createNote(note);
+      }
+    }.bind(this), 4000);
+  },
+  createNote: function(note) {
+    var uuid = this.guid();
+    note.id = uuid;
+    this.data.noteList[uuid] = note;
+    actions.createNoteSucceeded(note);
+    this.output();
+  },
   onUpdateNote: function(id, note) {
     // Clean input.
     note.id = id;
