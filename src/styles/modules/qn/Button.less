@@ -20,8 +20,9 @@
     top: unit(1/16, em);
   }
 
+  &--disabled,
   &[disabled],
-  &--disabled {
+  fieldset[disabled] & {
     .disabled();
   }
 
@@ -38,8 +39,9 @@
       text-shadow: inherit;
     }
 
+    &--disabled,
     &[disabled],
-    &--disabled {
+    fieldset[disabled] & {
       .disabled();
     }
   }

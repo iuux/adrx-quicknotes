@@ -41,39 +41,41 @@ var EditNote = React.createClass({
 
     this.checkValidity();
 
-    var isSubmitDisabled = this.isInvalid || this.state.requesting;
+    var isSubmitDisabled = this.isInvalid;
     var submitButtonLabel = this.state.requesting ? 'Saving' : 'Save';
     var processIndicator = this.state.requesting ? (<span className="qn-ProcessIndicator"/>) : null;
+
+    var isFormDisabled = this.state.requesting;
 
     return (
       <form className="qn-Content" onSubmit={this.handleSubmit}>
         <h2 className="qn-Content-heading">Edit Quick Note</h2>
-        <label className="qn-Label" htmlFor="qn-Input">Title</label>
-        <input className="qn-Input" id="qn-Input" type="text" required
-          ref="qnInput" autoFocus
-          maxLength={config.NOTE_TITLE_MAXLENGTH}
-          value={this.state.title}
-          onChange={this.handleTitleInputChange}
-          disabled={this.state.requesting}/>
-        <CategorySelector
-          selectedCategoryId={this.state.categoryId}
-          newCategoryName={this.state.newCategoryName}
-          onChange={this.handleCategorySelectorChange}
-          disabled={this.state.requesting}/>
-        <label className="qn-Label" htmlFor="qn-Note">Note</label>
-        <textarea className="qn-Input qn-Input--textarea" id="qn-Note" required
-          maxLength={config.NOTE_NOTE_MAXLENGTH}
-          value={this.state.note}
-          onChange={this.handleNoteInputChange}
-          disabled={this.state.requesting}></textarea>
-        <div className="qn-ActionBar">
-          <button className="qn-ActionBar-item qn-Button qn-Button--primary" type="submit"
-            disabled={isSubmitDisabled}>
-            {submitButtonLabel}
-            {processIndicator}</button>
-          <button className="qn-ActionBar-item qn-Button"
-            onClick={this.handleCancel}>Cancel</button>
-        </div>
+        <fieldset disabled={isFormDisabled}>
+          <label className="qn-Label" htmlFor="qn-Input">Title</label>
+          <input className="qn-Input" id="qn-Input" type="text" required
+            ref="qnInput" autoFocus
+            maxLength={config.NOTE_TITLE_MAXLENGTH}
+            value={this.state.title}
+            onChange={this.handleTitleInputChange}/>
+          <CategorySelector
+            selectedCategoryId={this.state.categoryId}
+            newCategoryName={this.state.newCategoryName}
+            onChange={this.handleCategorySelectorChange}
+            disabled={isFormDisabled}/>
+          <label className="qn-Label" htmlFor="qn-Note">Note</label>
+          <textarea className="qn-Input qn-Input--textarea" id="qn-Note" required
+            maxLength={config.NOTE_NOTE_MAXLENGTH}
+            value={this.state.note}
+            onChange={this.handleNoteInputChange}></textarea>
+          <div className="qn-ActionBar">
+            <button className="qn-ActionBar-item qn-Button qn-Button--primary" type="submit"
+              disabled={isSubmitDisabled}>
+              {submitButtonLabel}
+              {processIndicator}</button>
+            <button className="qn-ActionBar-item qn-Button"
+              onClick={this.handleCancel}>Cancel</button>
+          </div>
+        </fieldset>
       </form>
     );
   },

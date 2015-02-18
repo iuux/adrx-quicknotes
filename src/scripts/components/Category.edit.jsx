@@ -38,7 +38,7 @@ var EditCategory = React.createClass({
 
     this.checkValidity();
 
-    var isSubmitDisabled = this.isInvalid || this.state.requesting;
+    var isSubmitDisabled = this.isInvalid;
     var submitButtonLabel = this.state.requesting ? 'Renaming' : 'Rename';
     var processIndicator = this.state.requesting ? (<span className="qn-ProcessIndicator"/>) : null;
 
@@ -47,25 +47,29 @@ var EditCategory = React.createClass({
       <Alert type="error" message="Could not rename category."/>
     );
 
+    var isFormDisabled = false;
+
     return (
       <form className="qn-Content" onSubmit={this.handleSubmit}>
         <h2 className="qn-Content-heading">Edit category</h2>
         {error}
-        <label className="qn-Label" for="qn-Input">Name</label>
-        <input className="qn-Input" id="qn-Input" type="text" required
-          ref="qnInput" autoFocus
-          maxLength={config.CATEGORY_NAME_MAXLENGTH}
-          value={this.state.name}
-          onChange={this.handleNameInputChange}
-          disabled={this.state.requesting}/>
-        <div className="qn-ActionBar">
-          <button className="qn-ActionBar-item qn-Button" type="submit"
-            disabled={isSubmitDisabled}>
-            {submitButtonLabel}
-            {processIndicator}</button>
-          <button className="qn-ActionBar-item qn-Button"
-            onClick={this.handleCancel}>Cancel</button>
-        </div>
+        <fieldset disabled={isFormDisabled}>
+          <label className="qn-Label" for="qn-Input">Name</label>
+          <input className="qn-Input" id="qn-Input" type="text" required
+            ref="qnInput" autoFocus
+            maxLength={config.CATEGORY_NAME_MAXLENGTH}
+            value={this.state.name}
+            onChange={this.handleNameInputChange}
+            disabled={this.state.requesting}/>
+          <div className="qn-ActionBar">
+            <button className="qn-ActionBar-item qn-Button" type="submit"
+              disabled={isSubmitDisabled}>
+              {submitButtonLabel}
+              {processIndicator}</button>
+            <button className="qn-ActionBar-item qn-Button"
+              onClick={this.handleCancel}>Cancel</button>
+          </div>
+        </fieldset>
       </form>
     );
   },
