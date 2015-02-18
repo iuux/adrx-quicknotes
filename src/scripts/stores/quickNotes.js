@@ -127,6 +127,12 @@ var quickNotesStore = Reflux.createStore({
   deleteNote: function(id) {
     delete this.data.noteList[id];
   },
+  //
+  // Public methods
+  //
+  hasNotes: function() {
+    return !!Object.keys(this.data.noteList).length;
+  },
   output: function() {
     this.trigger(this.data);
   }

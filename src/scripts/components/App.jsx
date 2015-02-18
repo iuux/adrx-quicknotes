@@ -8,9 +8,11 @@ var Link = Router.Link;
 var RouteHandler = Router.RouteHandler;
 
 var categorizedNotesStore = require('../stores/categorizedNotes');
+var quickNotesStore = require('../stores/quickNotes');
 
 var App = React.createClass({
   mixins: [
+    Router.State,
     Reflux.connect(categorizedNotesStore, 'categorizedNotes')
   ],
   render: function() {
@@ -20,6 +22,11 @@ var App = React.createClass({
     if( !data ) {
       return null;
     }
+
+    // Render empty state.
+    var isHome = this.isActive('home');
+    var hasNotes = quickNotesStore.hasNotes();
+    var emptyState = isHome && !hasNotes ? this.renderEmptyState() : null;
 
     // Render categorized notes.
     var categorizedSection = this.renderSection(data.categorized);
@@ -36,6 +43,7 @@ var App = React.createClass({
           <Link to="note.new" className="qn-Button"
             activeClassName="qn-Button--disabled">New Quick Note</Link>
         </header>
+        {emptyState}
         <div className="qn-App-body">
           <nav className="qn-App-nav qn-Nav">
             {categorizedSection}
@@ -46,6 +54,11 @@ var App = React.createClass({
           </div>
         </div>
       </section>
+    );
+  },
+  renderEmptyState: function() {
+    return (
+      <p className="qn-App-empty">No Quick Notes have been created, yet.</p>
     );
   },
   renderSection: function(section) {
