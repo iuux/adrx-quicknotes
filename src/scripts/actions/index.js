@@ -4,15 +4,24 @@ var Reflux = require('reflux');
 
 var actions = Reflux.createActions([
   // Category
-  'createCategory',
   'getCategory',
   'renameCategory',
   'renameCategoryFailed',
   'renameCategorySucceeded',
+  'deleteCategory',
+  'deleteCategoryFailed',
+  'deleteCategorySucceeded',
   // Note
   'getNote',
+  'createNote',
+  'createNoteFailed',
+  'createNoteSucceeded',
   'updateNote',
-  'updateNoteSucceeded'
+  'updateNoteFailed',
+  'updateNoteSucceeded',
+  'deleteNote',
+  'deleteNoteFailed',
+  'deleteNoteSucceeded'
 ]);
 
 module.exports = actions;
