@@ -29,10 +29,20 @@ var quickNotesStore = Reflux.createStore({
     callback(category);
   },
   onRenameCategory: function(id, name) {
-    // Retain source.
-    //var _name = this.data.categoryList[id].name;
     // Clean input.
     name = name.trim();
+
+    // Error if there are existing categories with the same name.
+    var categoriesWithDuplicateNames = this.objectToArray(this.data.categoryList)
+      .filter(function(category) {
+        return category.name.toLowerCase() == name.toLowerCase();
+      });
+    var isDuplicateName = !!categoriesWithDuplicateNames.length;
+    if(isDuplicateName) {
+      actions.renameCategoryFailed('Category name already exists.');
+      return;
+    }
+
     // Simulate long request.
     setTimeout(function() {
       this.renameCategory(id, name);

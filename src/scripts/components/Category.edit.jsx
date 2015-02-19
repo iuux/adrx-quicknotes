@@ -50,9 +50,9 @@ var EditCategory = React.createClass({
     var submitButtonLabel = this.state.requesting ? 'Renaming' : 'Rename';
     var processIndicator = this.state.requesting ? (<span className="qn-ProcessIndicator"/>) : null;
 
-    var hasError = true;
+    var hasError = !!this.state.errorMessage;
     var error = !hasError ? null : (
-      <Alert type="error" message="Could not rename category."/>
+      <Alert type="error" message={this.state.errorMessage}/>
     );
 
     var isFormDisabled = false;
@@ -113,15 +113,17 @@ var EditCategory = React.createClass({
     e.preventDefault();
     actions.renameCategory(this.sourceState.id, this.state.name);
     this.setState({
-      requesting: true
+      requesting: true,
+      errorMessage: null
     });
   },
   onRenameCategorySucceeded: function(id) {
     this.handleCancel();
   },
-  onRenameCategoryFailed: function(id, sourceName, newName) {
+  onRenameCategoryFailed: function(message) {
     this.setState({
-      requesting: false
+      requesting: false,
+      errorMessage: message
     });
   },
   handleDelete: function(e) {
