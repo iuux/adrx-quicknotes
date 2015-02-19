@@ -55,7 +55,7 @@ var EditCategory = React.createClass({
       <Alert type="error" message={this.state.errorMessage}/>
     );
 
-    var isFormDisabled = false;
+    var isFormDisabled = this.state.requesting;
 
     return (
       <form className="qn-Content" onSubmit={this.handleRename}>
