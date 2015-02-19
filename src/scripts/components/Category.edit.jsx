@@ -52,7 +52,7 @@ var EditCategory = React.createClass({
 
     var hasError = !!this.state.errorMessage;
     var error = !hasError ? null : (
-      <Alert type="error" message={this.state.errorMessage}/>
+      <Alert type="error" ref="error" message={this.state.errorMessage}/>
     );
 
     var isFormDisabled = this.state.requesting;
@@ -124,7 +124,10 @@ var EditCategory = React.createClass({
     this.setState({
       requesting: false,
       errorMessage: message
-    });
+    }, this.onRenameCategoryFailedCallback);
+  },
+  onRenameCategoryFailedCallback: function() {
+    this.refs.error.getDOMNode().focus();
   },
   handleDelete: function(e) {
     e.preventDefault();
