@@ -142,6 +142,21 @@ var quickNotesStore = Reflux.createStore({
     note.id = id;
     note.title = note.title.trim();
     note.note = note.note.trim();
+
+    // Error if there are existing notes with the same title in the same category.
+    var notesWithDuplicateTitles = this.objectToArray(this.data.noteList)
+      .filter(function(aNote) {
+        var isNotItself = aNote.id != note.id;
+        var isDuplicate = aNote.title.toLowerCase() == note.title.toLowerCase();
+        var isInSameCategory = aNote.categoryId == note.categoryId;
+        return isNotItself && isDuplicate && isInSameCategory;
+      });
+    var isDuplicateTitle = !!notesWithDuplicateTitles.length;
+    if(isDuplicateTitle) {
+      actions.updateNoteFailed('Note title already exists in this category.');
+      return;
+    }
+
     // Create category, if needed.
     var shouldCreateNewCategory = !!note.newCategoryName && !!note.newCategoryName.length;
     // Simulate long request.

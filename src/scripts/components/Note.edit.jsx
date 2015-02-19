@@ -7,6 +7,7 @@ var noteStore = require('../stores/note');
 var actions = require('../actions');
 var config = require('../config');
 
+var Alert = require('./Alert');
 var CategorySelector = require('./CategorySelector');
 
 var EditNote = React.createClass({
@@ -45,12 +46,18 @@ var EditNote = React.createClass({
     var submitButtonLabel = this.state.requesting ? 'Saving' : 'Save';
     var processIndicator = this.state.requesting ? (<span className="qn-ProcessIndicator"/>) : null;
 
+    var hasError = !!this.state.errorMessage;
+    var error = !hasError ? null : (
+      <Alert type="error" ref="error" message={this.state.errorMessage}/>
+    );
+
     var isFormDisabled = this.state.requesting;
 
     return (
       <form className="qn-Content" onSubmit={this.handleSubmit}>
         <h2 className="qn-Content-heading">Edit Quick Note</h2>
         <fieldset disabled={isFormDisabled}>
+          {error}
           <label className="qn-Label" htmlFor="qn-Input">Title</label>
           <input className="qn-Input" id="qn-Input" type="text" required
             ref="qnInput" autoFocus
@@ -117,11 +124,22 @@ var EditNote = React.createClass({
     e.preventDefault();
     actions.updateNote(this.sourceState.id, this.state);
     this.setState({
-      requesting: true
+      requesting: true,
+      errorMessage: null
     });
   },
   onUpdateNoteSucceeded: function(id) {
     this.handleCancel();
+  },
+  onUpdateNoteFailed: function(message) {
+    console.log('failing', message);
+    this.setState({
+      requesting: false,
+      errorMessage: message
+    }, this.onUpdateNoteFailedCallback);
+  },
+  onUpdateNoteFailedCallback: function() {
+    this.refs.error.getDOMNode().focus();
   },
   handleDelete: function(e) {
     e.preventDefault();
