@@ -82,15 +82,17 @@ var EditCategory = React.createClass({
     );
   },
   renderDeleteCategoryForm: function() {
-    var isFormDisabled = false;
+    var isFormDisabled = this.state.requesting;
 
     return (
       <form className="qn-Content" onSubmit={this.handleDelete}>
         <h2 className="qn-Content-heading">Delete category</h2>
         <p className="qn-Content-paragraph">Delete category?</p>
-        <div className="qn-ActionBar">
-          <button className="qn-ActionBar-item qn-Button" type="submit">Delete</button>
-        </div>
+        <fieldset disabled={isFormDisabled}>
+          <div className="qn-ActionBar">
+            <button className="qn-ActionBar-item qn-Button" type="submit">Delete</button>
+          </div>
+        </fieldset>
       </form>
     );
   },
