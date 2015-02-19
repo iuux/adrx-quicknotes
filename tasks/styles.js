@@ -15,7 +15,7 @@ gulp.task('styles', function() {
     }))
     .on('error', console.error)
     .pipe(prefix())
-    .pipe(concat('bundle.css'))
+    .pipe(concat('styles.css'))
     .pipe(gulp.dest('./build'))
     .pipe(browserSync.reload({
       stream: true
