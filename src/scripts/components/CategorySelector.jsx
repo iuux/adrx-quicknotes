@@ -55,8 +55,10 @@ var CategorySelector = React.createClass({
           ref="toggleButton" id="toggleButton"
           disabled={this.props.disabled}
           onClick={this.handleToggleOptions}>
-          <span className="qn-CategorySelector-selectionText">{selectedName}</span>
-          <Icon name="caret-bottom" className="qn-CategorySelector-icon"/>
+          <div className="qn-CategorySelector-selectionContent">
+            <span className="qn-CategorySelector-selectionText">{selectedName}</span>
+            <Icon name="caret-bottom" className="qn-CategorySelector-icon"/>
+          </div>
         </button>
         {options}
       </div>
