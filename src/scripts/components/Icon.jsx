@@ -13,7 +13,7 @@ var Icon = React.createClass({
       <svg
         className={classNames}
         dangerouslySetInnerHTML={{__html:
-          "<use xlink:href=\"/icons.svg#qn-Icon--" + this.props.name + "\"></use>"
+          "<use xlink:href=\"#qn-Icon--" + this.props.name + "\"></use>"
         }}>
       </svg>
     );
