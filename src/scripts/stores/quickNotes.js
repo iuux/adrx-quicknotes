@@ -43,7 +43,9 @@ var quickNotesStore = Reflux.createStore({
     // Error if there are existing categories with the same name.
     var categoriesWithDuplicateNames = this.objectToArray(this.data.categoryList)
       .filter(function(category) {
-        return category.name.toLowerCase() == name.toLowerCase();
+        var isNotItself = category.id != id;
+        var isDuplicate = category.name.toLowerCase() == name.toLowerCase();
+        return isNotItself && isDuplicate;
       });
     var isDuplicateName = !!categoriesWithDuplicateNames.length;
     if(isDuplicateName) {
