@@ -6,6 +6,7 @@ var request = require('superagent');
 var data = require('./quickNotes.json');
 var actions = require('../actions');
 var mixins = require('./mixins');
+var config = require('../config');
 
 var quickNotesStore = Reflux.createStore({
   mixins: [mixins],
@@ -31,6 +32,13 @@ var quickNotesStore = Reflux.createStore({
   onRenameCategory: function(id, name) {
     // Clean input.
     name = name.trim();
+
+    // Error if name matches generic category.
+    var isUnspecifiedName = name.toLowerCase() == config.UNSPECIFIED_CATEGORY_NAME.toLowerCase();
+    if(isUnspecifiedName) {
+      actions.renameCategoryFailed('Category name is not allowed.');
+      return;
+    }
 
     // Error if there are existing categories with the same name.
     var categoriesWithDuplicateNames = this.objectToArray(this.data.categoryList)

@@ -4,6 +4,7 @@ var Reflux = require('reflux');
 
 var mixins = require('./mixins');
 var quickNotesStore = require('./quickNotes');
+var config = require('../config');
 
 var categorizedNotesStore = Reflux.createStore({
   mixins: [mixins],
@@ -72,7 +73,7 @@ var categorizedNotesStore = Reflux.createStore({
     this.data = {
       categorized: categorizedNotes,
       uncategorized: {
-        name: 'Unspecified',
+        name: config.UNSPECIFIED_CATEGORY_NAME,
         notes: uncategorizedNotes
       }
     };
