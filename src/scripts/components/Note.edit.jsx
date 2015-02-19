@@ -132,7 +132,6 @@ var EditNote = React.createClass({
     this.handleCancel();
   },
   onUpdateNoteFailed: function(message) {
-    console.log('failing', message);
     this.setState({
       requesting: false,
       errorMessage: message
