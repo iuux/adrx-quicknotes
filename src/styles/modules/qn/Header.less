@@ -12,9 +12,13 @@
     margin: 0;
     padding: 0;
 
-    a {
+    &Link {
       color: @color-Text--900;
       text-decoration: none;
+
+      &:focus {
+        .focus();
+      }
     }
   }
 }

@@ -34,7 +34,7 @@ var NewNote = React.createClass({
     return (
       <form className="qn-Content" onSubmit={this.handleSubmit}>
         <h2 className="qn-Content-heading">New Quick Note</h2>
-        <fieldset disabled={isFormDisabled}>
+        <fieldset className="qn-Fieldset" disabled={isFormDisabled}>
           <label className="qn-Label" htmlFor="qn-Input">Title</label>
           <input className="qn-Input" id="qn-Input" type="text" required
             ref="qnInput" autoFocus

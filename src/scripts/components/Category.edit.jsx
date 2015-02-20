@@ -60,7 +60,7 @@ var EditCategory = React.createClass({
     return (
       <form className="qn-Content" onSubmit={this.handleRename}>
         <h2 className="qn-Content-heading">Edit category</h2>
-        <fieldset disabled={isFormDisabled}>
+        <fieldset className="qn-Fieldset" disabled={isFormDisabled}>
           {error}
           <label className="qn-Label" for="qn-Input">Name</label>
           <input className="qn-Input" id="qn-Input" type="text" required
@@ -88,7 +88,7 @@ var EditCategory = React.createClass({
       <form className="qn-Content" onSubmit={this.handleDelete}>
         <h2 className="qn-Content-heading">Delete category</h2>
         <p className="qn-Content-paragraph">Delete category?</p>
-        <fieldset disabled={isFormDisabled}>
+        <fieldset className="qn-Fieldset" disabled={isFormDisabled}>
           <div className="qn-ActionBar">
             <button className="qn-ActionBar-item qn-Button" type="submit">Delete</button>
           </div>

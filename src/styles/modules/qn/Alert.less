@@ -5,6 +5,10 @@
   display: flex;
   padding: 1em;
 
+  &:focus {
+    .focus();
+  }
+
   &--error {
     background-color: @color-Danger--100;
     border-color: @color-Danger--400;

@@ -11,6 +11,10 @@
     min-width: 20em;
     text-align: left;
 
+    &:focus {
+      .focus();
+    }
+
     &--open {
       border-radius: 0.25em 0.25em 0 0;
     }
@@ -59,7 +63,7 @@
   &-options {
     .shadow();
     background-color: @color-White;
-    border: 0.1em solid @color-Interactive--400;
+    border: unit(1/16, em) solid @color-Interactive--400;
     box-sizing: border-box;
     display: block;
     margin: unit(-1/16, em) 0 0;
@@ -96,6 +100,7 @@
 
       + .qn-CategorySelector-label {
         .focus();
+        position: relative;
       }
     }
   }
