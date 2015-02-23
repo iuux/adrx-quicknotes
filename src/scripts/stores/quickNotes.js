@@ -17,7 +17,11 @@ function requestCallback(succeedCallback, failureCallback) {
       return;
     }
     if(!!succeedCallback) {
-      succeedCallback(res);
+      var value = res.text;
+      if(res.type == 'application/json') {
+        value = JSON.parse(value);
+      }
+      succeedCallback(value);
     }
   }
 }
@@ -29,8 +33,8 @@ var quickNotesStore = Reflux.createStore({
   // Initial
   //
   onGetData: function() {
-    var success = function(res) {
-      this.data = JSON.parse(res.text);
+    var success = function(json) {
+      this.data = json;
       this.output();
     }.bind(this);
 
@@ -123,25 +127,32 @@ var quickNotesStore = Reflux.createStore({
     note.body = note.body.trim();
     // Create category, if needed.
     var shouldCreateNewCategory = !!note.newCategoryName && !!note.newCategoryName.length;
-    // Simulate long request.
-    setTimeout(function() {
-      if(shouldCreateNewCategory) {
-        this.createCategory(note.newCategoryName, function(category) {
-          note.categoryId = category.categoryId;
-          this.createNote(note);
-        }.bind(this));
-      }
-      else {
-        this.createNote(note);
-      }
-    }.bind(this), 4000);
-  },
-  createNote: function(note) {
-    var uuid = this.guid();
-    note.quickNoteId = uuid;
-    this.data.notes[uuid] = note;
-    actions.createNoteSucceeded(note);
-    this.output();
+
+    var query = this.getQueryParams();
+    query.quick_note_title = note.title;
+    query.quick_note_body = note.body;
+
+    if(shouldCreateNewCategory) {
+      query.category_name = note.newCategoryName;
+    }
+    else {
+      query.category_id = note.categoryId;
+    }
+
+    var success = function(json) {
+      this.data = json;
+      actions.createNoteSucceeded();
+      this.output();
+    }.bind(this);
+
+    var fail = function() {
+      actions.createNoteFailed('Could not create Quick Note.');
+    };
+
+    var req = request
+      .post(this.api('createQuickNote'))
+      .query(query)
+      .end(requestCallback(success, fail));
   },
   onUpdateNote: function(id, note) {
     // Clean input.
