@@ -46,15 +46,6 @@ var quickNotesStore = Reflux.createStore({
   //
   // Categories
   //
-  createCategory: function(name, callback) {
-    var uuid = this.guid();
-    var category = {
-      categoryId: uuid,
-      name: name
-    };
-    this.data.categories[uuid] = category;
-    callback(category);
-  },
   onRenameCategory: function(id, name) {
     // Clean input.
     name = name.trim();
