@@ -73,8 +73,10 @@ var quickNotesStore = Reflux.createStore({
     query.category_id = id;
     query.category_name = name;
 
-    var success = function(res) {
-      this.renameCategory(id, name);
+    var success = function(json) {
+      this.data = json;
+      actions.renameCategorySucceeded(id);
+      this.output();
     }.bind(this);
 
     var fail = function(err) {
@@ -85,11 +87,6 @@ var quickNotesStore = Reflux.createStore({
       .post(this.api('updateCategory'))
       .query(query)
       .end(requestCallback(success, fail));
-  },
-  renameCategory: function(id, name) {
-    this.data.categories[id].name = name;
-    actions.renameCategorySucceeded(id);
-    this.output();
   },
   onDeleteCategory: function(id) {
     var query = this.getQueryParams();
