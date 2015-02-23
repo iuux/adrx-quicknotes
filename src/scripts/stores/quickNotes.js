@@ -8,6 +8,20 @@ var actions = require('../actions');
 var mixins = require('./mixins');
 var config = require('../config');
 
+function requestCallback(succeedCallback, failureCallback) {
+  return function(err, res) {
+    if(err || !res.ok) {
+      if(!!failureCallback) {
+        failureCallback(err, res);
+      }
+      return;
+    }
+    if(!!succeedCallback) {
+      succeedCallback(res);
+    }
+  }
+}
+
 var quickNotesStore = Reflux.createStore({
   mixins: [mixins],
   listenables: actions,
@@ -15,19 +29,15 @@ var quickNotesStore = Reflux.createStore({
   // Initial
   //
   onGetData: function() {
+    var success = function(res) {
+      this.data = JSON.parse(res.text);
+      this.output();
+    }.bind(this);
+
     var req = request
       .post(this.api('getUserQuickNoteList'))
       .query(this.getQueryParams())
-      .end(function(err, res) {
-        // Error.
-        if(err || !res.ok) {
-          console.log('Request failed.', err, res);
-          return;
-        }
-        // Success.
-        this.data = JSON.parse(res.text);
-        this.output();
-      }.bind(this));
+      .end(requestCallback(success));
   },
   //
   // Categories
@@ -69,18 +79,18 @@ var quickNotesStore = Reflux.createStore({
     query.category_id = id;
     query.category_name = name;
 
+    var success = function(res) {
+      this.renameCategory(id, name);
+    }.bind(this);
+
+    var fail = function(err) {
+      actions.renameCategoryFailed('Server could not rename category.');
+    };
+
     var req = request
       .post(this.api('updateCategory'))
       .query(query)
-      .end(function(err, res) {
-        // Error.
-        if(err || !res.ok) {
-          actions.renameCategoryFailed('Server could not rename category.');
-          return;
-        }
-        // Success.
-        this.renameCategory(id, name);
-      }.bind(this));
+      .end(requestCallback(success, fail));
   },
   renameCategory: function(id, name) {
     this.data.categories[id].name = name;
