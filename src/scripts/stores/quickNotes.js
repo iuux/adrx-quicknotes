@@ -3,7 +3,6 @@
 var Reflux = require('reflux');
 var request = require('superagent');
 
-var data = require('./quickNotes.json');
 var actions = require('../actions');
 var mixins = require('./mixins');
 var config = require('../config');
