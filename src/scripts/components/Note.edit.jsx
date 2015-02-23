@@ -29,7 +29,7 @@ var EditNote = React.createClass({
       title: note.title,
       categoryId: note.categoryId || 0,
       newCategoryName: '',
-      note: note.note || ''
+      body: note.body || ''
     });
     // Change focus to first input field.
     this.refs.qnInput.getDOMNode().focus();
@@ -72,7 +72,7 @@ var EditNote = React.createClass({
           <label className="qn-Label" htmlFor="qn-Note">Note</label>
           <textarea className="qn-Input qn-Input--textarea" id="qn-Note" required
             maxLength={config.NOTE_NOTE_MAXLENGTH}
-            value={this.state.note}
+            value={this.state.body}
             onChange={this.handleNoteInputChange}></textarea>
           <div className="qn-ActionBar">
             <button className="qn-ActionBar-item qn-Button qn-Button--primary" type="submit"
@@ -92,10 +92,10 @@ var EditNote = React.createClass({
     var hasInput, inputDiff, catDiff;
     // Fields need input, not including whitespace.
     hasInput = !!(this.state.title).trim().length;
-    hasInput &= !!(this.state.note).trim().length;
+    hasInput &= !!(this.state.body).trim().length;
     // Input is different than source data.
     inputDiff = this.state.title !== this.sourceState.title;
-    inputDiff |= this.state.note !== this.sourceState.note;
+    inputDiff |= this.state.body !== this.sourceState.body;
     // Category is different than source data.
     catDiff =  !!this.state.newCategoryName && !!this.state.newCategoryName.length;
     catDiff |= this.state.categoryId !== this.sourceState.categoryId;
@@ -117,12 +117,12 @@ var EditNote = React.createClass({
   },
   handleNoteInputChange: function(e) {
     this.setState({
-      note: e.target.value
+      body: e.target.value
     });
   },
   handleSubmit: function(e) {
     e.preventDefault();
-    actions.updateNote(this.sourceState.id, this.state);
+    actions.updateNote(this.sourceState.quickNoteId, this.state);
     this.setState({
       requesting: true,
       errorMessage: null
@@ -142,7 +142,7 @@ var EditNote = React.createClass({
   },
   handleDelete: function(e) {
     e.preventDefault();
-    actions.deleteNote(this.sourceState.id);
+    actions.deleteNote(this.sourceState.quickNoteId);
   },
   onDeleteNoteSucceeded: function(id) {
     this.handleCancel();

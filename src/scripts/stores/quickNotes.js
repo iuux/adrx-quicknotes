@@ -11,11 +11,24 @@ var config = require('../config');
 var quickNotesStore = Reflux.createStore({
   mixins: [mixins],
   listenables: actions,
-  init: function() {
-    this.data = data;
-  },
-  getInitialState: function() {
-    return this.data;
+  //
+  // Initial
+  //
+  onGetData: function() {
+    var api = 'http://156.56.176.66:8080/sisaarex-dev/adrx/portal.do?methodToCall=getUserQuickNoteList';
+    var req = request
+      .post(api)
+      .query(this.getQueryParams())
+      .end(function(err, res) {
+        // Error.
+        if(err || !res.ok) {
+          console.log('Request failed.', err, res);
+          return;
+        }
+        // Success.
+        this.data = JSON.parse(res.text);
+        this.output();
+      }.bind(this));
   },
   //
   // Categories
@@ -23,10 +36,10 @@ var quickNotesStore = Reflux.createStore({
   createCategory: function(name, callback) {
     var uuid = this.guid();
     var category = {
-      id: uuid,
+      categoryId: uuid,
       name: name
     };
-    this.data.categoryList[uuid] = category;
+    this.data.categories[uuid] = category;
     callback(category);
   },
   onRenameCategory: function(id, name) {
@@ -41,9 +54,9 @@ var quickNotesStore = Reflux.createStore({
     }
 
     // Error if there are existing categories with the same name.
-    var categoriesWithDuplicateNames = this.objectToArray(this.data.categoryList)
+    var categoriesWithDuplicateNames = this.objectToArray(this.data.categories)
       .filter(function(category) {
-        var isNotItself = category.id != id;
+        var isNotItself = category.categoryId != id;
         var isDuplicate = category.name.toLowerCase() == name.toLowerCase();
         return isNotItself && isDuplicate;
       });
@@ -89,24 +102,24 @@ var quickNotesStore = Reflux.createStore({
       }.bind(this));
   },
   renameCategory: function(id, name) {
-    this.data.categoryList[id].name = name;
+    this.data.categories[id].name = name;
     actions.renameCategorySucceeded(id);
     this.output();
   },
   onDeleteCategory: function(id) {
     // Convert notes list to array.
-    this.objectToArray(this.data.noteList)
+    this.objectToArray(this.data.notes)
       // Find all notes within the given category.
       .filter(function(note) {
         return note.categoryId == id;
       })
       // Delete all notes within the given category.
       .forEach(function(note) {
-        this.deleteNote(note.id);
+        this.deleteNote(note.quickNoteId);
       }.bind(this));
 
     // Delete the category.
-    delete this.data.categoryList[id];
+    delete this.data.categories[id];
 
     actions.deleteCategorySucceeded(id);
     this.output();
@@ -116,14 +129,14 @@ var quickNotesStore = Reflux.createStore({
   //
   onCreateNote: function(note) {
     note.title = note.title.trim();
-    note.note = note.note.trim();
+    note.body = note.body.trim();
     // Create category, if needed.
     var shouldCreateNewCategory = !!note.newCategoryName && !!note.newCategoryName.length;
     // Simulate long request.
     setTimeout(function() {
       if(shouldCreateNewCategory) {
         this.createCategory(note.newCategoryName, function(category) {
-          note.categoryId = category.id;
+          note.categoryId = category.categoryId;
           this.createNote(note);
         }.bind(this));
       }
@@ -134,21 +147,21 @@ var quickNotesStore = Reflux.createStore({
   },
   createNote: function(note) {
     var uuid = this.guid();
-    note.id = uuid;
-    this.data.noteList[uuid] = note;
+    note.quickNoteId = uuid;
+    this.data.notes[uuid] = note;
     actions.createNoteSucceeded(note);
     this.output();
   },
   onUpdateNote: function(id, note) {
     // Clean input.
-    note.id = id;
+    note.quickNoteId = id;
     note.title = note.title.trim();
-    note.note = note.note.trim();
+    note.body = note.body.trim();
 
     // Error if there are existing notes with the same title in the same category.
-    var notesWithDuplicateTitles = this.objectToArray(this.data.noteList)
+    var notesWithDuplicateTitles = this.objectToArray(this.data.notes)
       .filter(function(aNote) {
-        var isNotItself = aNote.id != note.id;
+        var isNotItself = aNote.quickNoteId != note.quickNoteId;
         var isDuplicate = aNote.title.toLowerCase() == note.title.toLowerCase();
         var isInSameCategory = aNote.categoryId == note.categoryId;
         return isNotItself && isDuplicate && isInSameCategory;
@@ -165,7 +178,7 @@ var quickNotesStore = Reflux.createStore({
     setTimeout(function() {
       if(shouldCreateNewCategory) {
         this.createCategory(note.newCategoryName, function(category) {
-          note.categoryId = category.id;
+          note.categoryId = category.categoryId;
           this.updateNote(id, note);
         }.bind(this));
       }
@@ -175,7 +188,7 @@ var quickNotesStore = Reflux.createStore({
     }.bind(this), 4000);
   },
   updateNote: function(id, note) {
-    this.data.noteList[id] = note;
+    this.data.notes[id] = note;
     actions.updateNoteSucceeded(note);
     this.output();
   },
@@ -185,13 +198,13 @@ var quickNotesStore = Reflux.createStore({
     this.output();
   },
   deleteNote: function(id) {
-    delete this.data.noteList[id];
+    delete this.data.notes[id];
   },
   //
   // Public methods
   //
   hasNotes: function() {
-    return !!Object.keys(this.data.noteList).length;
+    return !!Object.keys(this.data.notes).length;
   },
   output: function() {
     this.trigger(this.data);

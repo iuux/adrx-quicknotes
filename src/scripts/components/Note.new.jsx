@@ -19,7 +19,7 @@ var NewNote = React.createClass({
       title: '',
       categoryId: 0,
       newCategoryName: '',
-      note: ''
+      body: ''
     };
   },
   render: function() {
@@ -49,7 +49,7 @@ var NewNote = React.createClass({
           <label className="qn-Label" htmlFor="qn-Note">Note</label>
           <textarea className="qn-Input qn-Input--textarea" id="qn-Note" required
             maxLength={config.NOTE_NOTE_MAXLENGTH}
-            value={this.state.note}
+            value={this.state.body}
             onChange={this.handleNoteInputChange}></textarea>
           <div className="qn-ActionBar">
             <button className="qn-ActionBar-item qn-Button qn-Button--primary" type="submit"
@@ -67,7 +67,7 @@ var NewNote = React.createClass({
     var hasInput, inputDiff, catDiff;
     // Fields need input, not including whitespace.
     hasInput = !!(this.state.title).trim().length;
-    hasInput &= !!(this.state.note).trim().length;
+    hasInput &= !!(this.state.body).trim().length;
     // Combine validity checks.
     // Valid means there are differences which can be saved.
     this.isValid = hasInput;
@@ -86,7 +86,7 @@ var NewNote = React.createClass({
   },
   handleNoteInputChange: function(e) {
     this.setState({
-      note: e.target.value
+      body: e.target.value
     });
   },
   handleSubmit: function(e) {

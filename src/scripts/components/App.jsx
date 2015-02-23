@@ -7,6 +7,7 @@ var Router = require('react-router');
 var Link = Router.Link;
 var RouteHandler = Router.RouteHandler;
 
+var actions = require('../actions');
 var categorizedNotesStore = require('../stores/categorizedNotes');
 var quickNotesStore = require('../stores/quickNotes');
 
@@ -15,6 +16,9 @@ var App = React.createClass({
     Router.State,
     Reflux.connect(categorizedNotesStore, 'categorizedNotes')
   ],
+  componentDidMount: function() {
+    actions.getData();
+  },
   render: function() {
     // Get data.
     var data = this.state.categorizedNotes;
@@ -66,22 +70,22 @@ var App = React.createClass({
 
       var notes = category.notes.map(function(note) {
         return (
-          <Link to="note.edit" params={{id: note.id}}
+          <Link to="note.edit" params={{id: note.quickNoteId}}
             className="qn-Nav-item"
             activeClassName="qn-Nav-item--active">{note.title}</Link>
         );
       });
 
       // A category is editable if it has an id.
-      var categoryName = !category.id ? category.name : (
-        <Link to="category.edit" params={{id: category.id}}
+      var categoryName = !category.categoryId ? category.name : (
+        <Link to="category.edit" params={{id: category.categoryId}}
           className="qn-Nav-item"
           activeClassName="qn-Nav-item--active">{category.name}</Link>
       );
 
       var navHeadingClasses = cx({
         'qn-Nav-heading': true,
-        'qn-Nav-heading--unspecified': !category.id
+        'qn-Nav-heading--unspecified': !category.categoryId
       });
 
       return (

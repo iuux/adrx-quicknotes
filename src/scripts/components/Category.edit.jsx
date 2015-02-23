@@ -113,7 +113,7 @@ var EditCategory = React.createClass({
   },
   handleRename: function(e) {
     e.preventDefault();
-    actions.renameCategory(this.sourceState.id, this.state.name);
+    actions.renameCategory(this.sourceState.categoryId, this.state.name);
     this.setState({
       requesting: true,
       errorMessage: null
@@ -133,7 +133,7 @@ var EditCategory = React.createClass({
   },
   handleDelete: function(e) {
     e.preventDefault();
-    actions.deleteCategory(this.sourceState.id);
+    actions.deleteCategory(this.sourceState.categoryId);
   },
   onDeleteCategorySucceeded: function(id) {
     this.handleCancel();

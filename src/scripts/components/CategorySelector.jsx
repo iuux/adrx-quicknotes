@@ -40,7 +40,7 @@ var CategorySelector = React.createClass({
     else {
       var categoryList = this.state.categorizedNotes.categorized;
       var selectedCategory = categoryList.filter(function(category) {
-        return category.id == this.props.selectedCategoryId;
+        return category.categoryId == this.props.selectedCategoryId;
       }.bind(this))[0];
       selectedName = selectedCategory.name;
     }
@@ -102,14 +102,14 @@ var CategorySelector = React.createClass({
     );
   },
   renderCategoryInput: function(category) {
-    var id = !!category.id ? category.id : 0;
+    var id = !!category.categoryId ? category.categoryId : 0;
     var optionId = 'category' + id;
     var isSelected = this.props.selectedCategoryId == id;
 
     var optionLabelClasses = cx({
       'qn-CategorySelector-label': true,
       'qn-CategorySelector-label--option': true,
-      'qn-CategorySelector-label--unspecified': !category.id
+      'qn-CategorySelector-label--unspecified': !category.categoryId
     });
 
     var icon = isSelected ? (<Icon name="check"/>) : null;

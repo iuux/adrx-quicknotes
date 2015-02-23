@@ -9,17 +9,14 @@ var config = require('../config');
 var categorizedNotesStore = Reflux.createStore({
   mixins: [mixins],
   init: function() {
-    // Listen to store.
     this.listenTo(quickNotesStore, this.onStoreChange);
-    // Trigger the store.
-    quickNotesStore.output();
   },
   getInitialState: function() {
     return this.data;
   },
   onStoreChange: function(status) {
-    var categories = status.categoryList;
-    var notes = status.noteList;
+    var categories = status.categories;
+    var notes = status.notes;
 
     // Don't do anything if there aren't cached stores.
     if( !categories || !notes ) {
