@@ -201,7 +201,23 @@ var quickNotesStore = Reflux.createStore({
     this.output();
   },
   deleteNote: function(id) {
-    delete this.data.notes[id];
+    var query = this.getQueryParams();
+    query.quick_note_id = id;
+
+    var success = function(json) {
+      this.data = json;
+      actions.deleteNoteSucceeded();
+      this.output();
+    }.bind(this);
+
+    var fail = function() {
+      actions.deleteNoteFailed('Could not delete Quick Note.');
+    };
+
+    var req = request
+      .post(this.api('deleteQuickNote'))
+      .query(query)
+      .end(requestCallback(success, fail));
   },
   //
   // Public methods
