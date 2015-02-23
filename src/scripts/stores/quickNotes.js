@@ -15,9 +15,8 @@ var quickNotesStore = Reflux.createStore({
   // Initial
   //
   onGetData: function() {
-    var api = 'http://156.56.176.66:8080/sisaarex-dev/adrx/portal.do?methodToCall=getUserQuickNoteList';
     var req = request
-      .post(api)
+      .post(this.api('getUserQuickNoteList'))
       .query(this.getQueryParams())
       .end(function(err, res) {
         // Error.
@@ -66,39 +65,21 @@ var quickNotesStore = Reflux.createStore({
       return;
     }
 
-    // Simulate long request.
-    setTimeout(function() {
-      this.renameCategory(id, name);
-      //actions.renameCategoryFailed(id, _name, name);
-    }.bind(this), 4000);
-  },
-  _onRenameCategory: function(id, name) {
-    // Retain source.
-    var _name = this.data[id].name;
-    // Clean input.
-    name = name.trim();
-    // Optimistically rename.
-    this._renameCategory(id, name);
-    // Send request.
-    var api = 'http://156.56.176.66:8080/sisaarex-dev/adrx/portal.do?methodToCall=updateCategory';
-    //api += '&sr=1ff3660c-4f1d-4894-a1b7-854a9e236bbf';
+    var query = this.getQueryParams();
+    query.category_id = id;
+    query.category_name = name;
+
     var req = request
-      .post(api)
-      .type('form')
-      //.get(api)
-      .send({
-      //.query({
-        category_id: 1,
-        category_name: name
-      })
+      .post(this.api('updateCategory'))
+      .query(query)
       .end(function(err, res) {
-        console.log('response', err, res, req);
-        // Update failed. Revert changes.
+        // Error.
         if(err || !res.ok) {
-          console.log('Update failed. Reverting to', _name);
-          this.renameCategory(id, _name);
-          actions.renameCategoryFailed(id, _name, name);
+          actions.renameCategoryFailed('Server could not rename category.');
+          return;
         }
+        // Success.
+        this.renameCategory(id, name);
       }.bind(this));
   },
   renameCategory: function(id, name) {
