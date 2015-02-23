@@ -217,6 +217,9 @@ var quickNotesStore = Reflux.createStore({
   //
   // Public methods
   //
+  hasData: function() {
+    return !!this.data;
+  },
   hasNotes: function() {
     return !!Object.keys(this.data.notes).length;
   },

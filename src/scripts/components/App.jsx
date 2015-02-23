@@ -20,23 +20,12 @@ var App = React.createClass({
     actions.getData();
   },
   render: function() {
-    // Get data.
-    var data = this.state.categorizedNotes;
-    // Need data to render.
-    if( !data ) {
-      return null;
-    }
+    var hasData = quickNotesStore.hasData();
 
-    // Render empty state.
-    var isHome = this.isActive('home');
-    var hasNotes = quickNotesStore.hasNotes();
-    var emptyState = isHome && !hasNotes ? this.renderEmptyState() : null;
+    var buttonStyle = hasData ? null : { visibility: 'hidden' };
+    var processIndicator = hasData ? null : (<span className="qn-ProcessIndicator"/>);
 
-    // Render categorized notes.
-    var categorizedSection = this.renderSection(data.categorized);
-    // Only render uncategorized notes section if there are child notes.
-    var hasUncategorizedNotes = !!data.uncategorized.notes.length;
-    var uncategorizedSection = hasUncategorizedNotes ? this.renderSection([data.uncategorized]) : null;
+    var body = hasData ? this.renderBody() : null;
 
     return (
       <section className="qn-App">
@@ -44,9 +33,30 @@ var App = React.createClass({
           <h1 className="qn-Header-heading">
             <Link to="home" className="qn-Header-headingLink">Quick Notes</Link>
           </h1>
-          <Link to="note.new" className="qn-Button"
+          <Link to="note.new" className="qn-Button" style={buttonStyle}
             activeClassName="qn-Button--disabled">New Quick Note</Link>
+          {processIndicator}
         </header>
+        {body}
+      </section>
+    );
+  },
+  renderBody: function() {
+    // Render empty state.
+    var isHome = this.isActive('home');
+    var hasNotes = quickNotesStore.hasNotes();
+    var emptyState = isHome && !hasNotes ? this.renderEmptyState() : null;
+
+    // Get data.
+    var data = this.state.categorizedNotes;
+    // Render categorized notes.
+    var categorizedSection = this.renderSection(data.categorized);
+    // Only render uncategorized notes section if there are child notes.
+    var hasUncategorizedNotes = !!data.uncategorized.notes.length;
+    var uncategorizedSection = hasUncategorizedNotes ? this.renderSection([data.uncategorized]) : null;
+
+    return (
+      <div>
         {emptyState}
         <div className="qn-App-body">
           <nav className="qn-App-nav qn-Nav">
@@ -57,7 +67,7 @@ var App = React.createClass({
             <RouteHandler {...this.props} />
           </div>
         </div>
-      </section>
+      </div>
     );
   },
   renderEmptyState: function() {
