@@ -8,8 +8,6 @@ function task() {
       id: 'qn-Icon--%f',
       templates: ['default-svg']
     }))
-    .pipe(rename('icons.svg.tag'))
-    .pipe(gulp.dest('./build'))
     .pipe(rename('icons.svg'))
     .pipe(gulp.dest('./build'));
 }
