@@ -40,6 +40,11 @@ var categorizedNotesStore = Reflux.createStore({
       var note = notes[key];
       var categoryId = note.categoryId;
       if( !!categoryId ) {
+        // Check if the category exists.
+        if( !categories[categoryId] ) {
+          console.log('DATABASE ERROR: Category does not exist (id:', categoryId + ')');
+          return;
+        }
         categories[categoryId].notes.push(note);
       }
       else {
