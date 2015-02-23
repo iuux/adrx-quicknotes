@@ -176,23 +176,33 @@ var quickNotesStore = Reflux.createStore({
 
     // Create category, if needed.
     var shouldCreateNewCategory = !!note.newCategoryName && !!note.newCategoryName.length;
-    // Simulate long request.
-    setTimeout(function() {
-      if(shouldCreateNewCategory) {
-        this.createCategory(note.newCategoryName, function(category) {
-          note.categoryId = category.categoryId;
-          this.updateNote(id, note);
-        }.bind(this));
-      }
-      else {
-        this.updateNote(id, note);
-      }
-    }.bind(this), 4000);
-  },
-  updateNote: function(id, note) {
-    this.data.notes[id] = note;
-    actions.updateNoteSucceeded(note);
-    this.output();
+
+    var query = this.getQueryParams();
+    query.quick_note_id = id;
+    query.quick_note_title = note.title;
+    query.quick_note_body = note.body;
+
+    if(shouldCreateNewCategory) {
+      query.category_name = note.newCategoryName;
+    }
+    else {
+      query.category_id = note.categoryId;
+    }
+
+    var success = function(json) {
+      this.data = json;
+      actions.updateNoteSucceeded();
+      this.output();
+    }.bind(this);
+
+    var fail = function() {
+      actions.updateNoteFailed('Could not update Quick Note.');
+    };
+
+    var req = request
+      .post(this.api('updateQuickNote'))
+      .query(query)
+      .end(requestCallback(success, fail));
   },
   onDeleteNote: function(id) {
     this.deleteNote(id);
