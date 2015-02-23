@@ -196,11 +196,6 @@ var quickNotesStore = Reflux.createStore({
       .end(requestCallback(success, fail));
   },
   onDeleteNote: function(id) {
-    this.deleteNote(id);
-    actions.deleteNoteSucceeded(id);
-    this.output();
-  },
-  deleteNote: function(id) {
     var query = this.getQueryParams();
     query.quick_note_id = id;
 
