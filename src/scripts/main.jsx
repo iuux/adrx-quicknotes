@@ -21,7 +21,7 @@ var routes = (
 );
 
 Router.run(routes, function(Handler, state) {
-  React.render(<Handler params={state.params} />, document.getElementById('app'));
+  React.render(<Handler params={state.params} />, document.getElementById('adrx-qn-app'));
 });
 
 // Eliminate 300ms click delay on mobile.
