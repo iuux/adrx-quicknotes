@@ -5,6 +5,9 @@ var Reflux = require('reflux');
 var actions = Reflux.createActions([
   // General
   'getData',
+  'getDataCalled',
+  'getDataSucceeded',
+  'getDataFailed',
   // Category
   'getCategory',
   'renameCategory',

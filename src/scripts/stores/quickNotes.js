@@ -32,15 +32,31 @@ var quickNotesStore = Reflux.createStore({
   // Initial
   //
   onGetData: function() {
+    actions.getDataCalled();
+
+    function renderErrorMessage() {
+      return (
+        <span>
+          Quick Notes could not load.
+          Please <button className="qn-Alert-link" onClick={actions.getData}>try again</button>.
+        </span>
+      );
+    }
+
     var success = function(json) {
       this.data = json;
+      actions.getDataSucceeded();
       this.output();
+    }.bind(this);
+
+    var fail = function() {
+      actions.getDataFailed(renderErrorMessage());
     }.bind(this);
 
     var req = request
       .post(this.api('getUserQuickNoteList'))
       .query(this.getQueryParams())
-      .end(requestCallback(success));
+      .end(requestCallback(success, fail));
   },
   //
   // Categories

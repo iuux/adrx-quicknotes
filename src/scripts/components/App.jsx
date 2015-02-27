@@ -11,20 +11,24 @@ var actions = require('../actions');
 var categorizedNotesStore = require('../stores/categorizedNotes');
 var quickNotesStore = require('../stores/quickNotes');
 
+var Alert = require('./Alert');
+
 var App = React.createClass({
   mixins: [
     Router.State,
-    Reflux.connect(categorizedNotesStore, 'categorizedNotes')
+    Reflux.connect(categorizedNotesStore, 'categorizedNotes'),
+    Reflux.listenToMany(actions)
   ],
   componentDidMount: function() {
     actions.getData();
   },
   render: function() {
+    var buttonStyle = this.state.loaded ? null : { visibility: 'hidden' };
+    var processIndicator = this.state.requesting ? (<span className="qn-ProcessIndicator"/>) : null;
+
+    var error = this.state.errorMessage ? this.renderError() : null;
+
     var hasData = quickNotesStore.hasData();
-
-    var buttonStyle = hasData ? null : { visibility: 'hidden' };
-    var processIndicator = hasData ? null : (<span className="qn-ProcessIndicator"/>);
-
     var body = hasData ? this.renderBody() : null;
 
     return (
@@ -37,8 +41,16 @@ var App = React.createClass({
             activeClassName="qn-Button--disabled">New Quick Note</Link>
           {processIndicator}
         </header>
+        {error}
         {body}
       </section>
+    );
+  },
+  renderError: function() {
+    return (
+      <div className="qn-App-error">
+        <Alert type="error" ref="error" message={this.state.errorMessage}/>
+      </div>
     );
   },
   renderBody: function() {
@@ -105,6 +117,29 @@ var App = React.createClass({
         </div>
       );
     });
+  },
+  onGetDataCalled: function() {
+    this.setState({
+      requesting: true,
+      loaded: false,
+      errorMessage: null
+    });
+  },
+  onGetDataSucceeded: function() {
+    this.setState({
+      requesting: false,
+      loaded: true
+    });
+  },
+  onGetDataFailed: function(message) {
+    this.setState({
+      requesting: false,
+      loaded: false,
+      errorMessage: message
+    }, this.onGetDataFailedCallback);
+  },
+  onGetDataFailedCallback: function() {
+    this.refs.error.getDOMNode().focus();
   }
 });
 
