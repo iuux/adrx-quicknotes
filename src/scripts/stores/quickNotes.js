@@ -68,7 +68,7 @@ var quickNotesStore = Reflux.createStore({
     // Error if name matches generic category.
     var isUnspecifiedName = name.toLowerCase() == config.UNSPECIFIED_CATEGORY_NAME.toLowerCase();
     if(isUnspecifiedName) {
-      actions.renameCategoryFailed('Category name is not allowed.');
+      actions.renameCategoryFailed('Category name already exists.');
       return;
     }
 
@@ -95,8 +95,8 @@ var quickNotesStore = Reflux.createStore({
       this.output();
     }.bind(this);
 
-    var fail = function(err) {
-      actions.renameCategoryFailed('Server could not rename category.');
+    var fail = function() {
+      actions.renameCategoryFailed('Could not rename. Please try again.');
     };
 
     var req = request
@@ -115,7 +115,7 @@ var quickNotesStore = Reflux.createStore({
     }.bind(this);
 
     var fail = function() {
-      actions.deleteCategoryFailed('Could not delete category.');
+      actions.deleteCategoryFailed('Could not delete category. Please try again.');
     };
 
     var req = request
@@ -150,7 +150,7 @@ var quickNotesStore = Reflux.createStore({
     }.bind(this);
 
     var fail = function() {
-      actions.createNoteFailed('Could not create Quick Note.');
+      actions.createNoteFailed('Could not create Quick Note. Please try again.');
     };
 
     var req = request
@@ -200,7 +200,7 @@ var quickNotesStore = Reflux.createStore({
     }.bind(this);
 
     var fail = function() {
-      actions.updateNoteFailed('Could not update Quick Note.');
+      actions.updateNoteFailed('Could not update Quick Note. Please try again.');
     };
 
     var req = request
@@ -219,7 +219,7 @@ var quickNotesStore = Reflux.createStore({
     }.bind(this);
 
     var fail = function() {
-      actions.deleteNoteFailed('Could not delete Quick Note.');
+      actions.deleteNoteFailed('Could not delete Quick Note. Please try again.');
     };
 
     var req = request
