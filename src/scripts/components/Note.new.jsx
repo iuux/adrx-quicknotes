@@ -99,7 +99,10 @@ var NewNote = React.createClass({
   onCreateNoteSucceeded: function(note) {
     this.handleCancel();
   },
-  handleCancel: function() {
+  handleCancel: function(e) {
+    if(!!e) {
+      e.preventDefault();
+    }
     this.transitionTo('home');
   }
 });

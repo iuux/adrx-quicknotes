@@ -147,7 +147,10 @@ var EditNote = React.createClass({
   onDeleteNoteSucceeded: function(id) {
     this.handleCancel();
   },
-  handleCancel: function() {
+  handleCancel: function(e) {
+    if(!!e) {
+      e.preventDefault();
+    }
     this.transitionTo('home');
   }
 });
