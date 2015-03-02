@@ -5,5 +5,5 @@ gulp.task('watch', function() {
   gulp.watch('./src/*.html', ['html', browserSync.reload]);
   gulp.watch('./src/**/*.less', ['styles']);
   gulp.watch('./src/**/*.{js,json,jsx}', ['scripts', browserSync.reload]);
-  gulp.watch('./build/**/{styles.css,scripts.js,vendor.js}', ['rev']);
+  gulp.watch('./build/**/{styles.css,scripts.min.js,vendor.js}', ['rev']);
 });
