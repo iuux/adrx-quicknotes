@@ -2,6 +2,7 @@ var gulp = require('gulp');
 var browserify = require('browserify');
 var reactify = require('reactify');
 var source = require('vinyl-source-stream');
+var rename = require('gulp-rename');
 var buffer = require('vinyl-buffer');
 var uglify = require('gulp-uglify');
 var gzip = require('gulp-gzip');
@@ -19,6 +20,8 @@ gulp.task('scripts', function() {
     .pipe(gulp.dest('./build'))
     .pipe(buffer())
     .pipe(uglify())
+    .pipe(rename('scripts.min.js'))
+    .pipe(gulp.dest('./build'))
     .pipe(gzip())
     .pipe(gulp.dest('./build'));
 });
