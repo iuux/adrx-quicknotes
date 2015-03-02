@@ -53,12 +53,24 @@ var categorizedNotesStore = Reflux.createStore({
     var categorizedNotes = this.objectToArray(categories);
 
     // Sorting functions.
+    function sortStrings(a, b) {
+      a = a.toLowerCase();
+      b = b.toLowerCase();
+      if(a < b) {
+        return -1;
+      }
+      if(a > b) {
+        return 1;
+      }
+      return 0;
+    }
+
     function sortNotesByTitle(a, b) {
-      return a.title > b.title;
+      return sortStrings(a.title, b.title);
     }
 
     function sortCategoriesByName(a, b) {
-      return a.name > b.name;
+      return sortStrings(a.name, b.name);
     }
 
     // Sort categories.
