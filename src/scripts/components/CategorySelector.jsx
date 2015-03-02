@@ -173,15 +173,8 @@ var CategorySelector = React.createClass({
   handleOptionInputChange: function(e) {
     // Close the options.
     this.handleToggleOptions(e);
-    // Inform the parent component about the change.
-    var categoryId = e.target.value == "0" ? 0 : e.target.value;
-    this.props.onChange({
-      categoryId: categoryId
-    });
-    // Clear new category name input value.
-    this.setState({
-      newCategoryName: null
-    });
+    // Select based on id.
+    this.selectCategoryId(e.target.value);
   },
   handleOptionInputKeyDown: function(e) {
     // Enter key works just like space bar or clicking.
@@ -204,25 +197,50 @@ var CategorySelector = React.createClass({
     this.handleToggleOptions(e);
     // Clean the input.
     var newCategoryName = e.target.value.trim();
-    // Validate that the input has content.
+    // Check for content.
     if(!newCategoryName.length) {
-      // Set category to unspecified.
-      this.props.onChange({
-        categoryId: 0
-      });
-      // Clear new category name input value.
-      this.setState({
-        newCategoryName: null
-      });
+      this.selectCategoryId(0);
       return;
     }
+    // Check if the content matches the unspecified name.
+    var isUnspecified = newCategoryName.toLowerCase() == config.UNSPECIFIED_CATEGORY_NAME.toLowerCase();
+    if(isUnspecified) {
+      this.selectCategoryId(0);
+      return;
+    }
+    // Check if the input matches any existing categories.
+    var categoryList = this.state.categorizedNotes.categorized;
+    var duplicateCategories = categoryList.filter(function(category) {
+      return category.name.toLowerCase() == newCategoryName.toLowerCase();
+    }.bind(this));
+    // Input matches existing category.
+    if(!!duplicateCategories.length) {
+      var id = duplicateCategories[0].categoryId;
+      this.selectCategoryId(id);
+      return;
+    }
+    // Create a new category.
+    this.selectCategoryName(newCategoryName);
+  },
+  selectCategoryId: function(id) {
+    id = id == '0' ? 0 : id;
     // Inform the parent component about the change.
     this.props.onChange({
-      newCategoryName: newCategoryName
+      categoryId: id
+    });
+    // Clear new category name input value.
+    this.setState({
+      newCategoryName: null
+    });
+  },
+  selectCategoryName: function(name) {
+    // Inform the parent component about the change.
+    this.props.onChange({
+      newCategoryName: name
     });
     // Match internal state to outer state.
     this.setState({
-      newCategoryName: newCategoryName
+      newCategoryName: name
     });
   }
 });
