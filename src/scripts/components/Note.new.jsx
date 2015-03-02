@@ -48,7 +48,7 @@ var NewNote = React.createClass({
             disabled={isFormDisabled}/>
           <label className="qn-Label" htmlFor="qn-Note">Note</label>
           <textarea className="qn-Input qn-Input--textarea" id="qn-Note" required
-            maxLength={config.NOTE_NOTE_MAXLENGTH}
+            maxLength={config.NOTE_BODY_MAXLENGTH}
             value={this.state.body}
             onChange={this.handleNoteInputChange}></textarea>
           <div className="qn-ActionBar">
