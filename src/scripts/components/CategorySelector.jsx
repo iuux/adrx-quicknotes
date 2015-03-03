@@ -80,6 +80,7 @@ var CategorySelector = React.createClass({
         <div className="qn-CategorySelector-backdrop"
           onClick={this.handleBackdropClick}></div>
         <fieldset className="qn-CategorySelector-options"
+          ref="modal"
           onKeyDown={this.handleKeyDown}>
           <legend className="qn-CategorySelector-legend">Select category</legend>
           {categoryList}
@@ -158,8 +159,13 @@ var CategorySelector = React.createClass({
     this.handleCancel(e);
   },
   handleKeyDown: function(e) {
-    if(e.key == 'Escape') {
-      this.handleCancel(e);
+    switch(e.key) {
+      case 'Escape':
+        this.handleCancel(e);
+        break;
+      case 'Tab':
+        this.handleTab(e);
+        break;
     }
   },
   handleCancel: function(e) {
@@ -169,6 +175,30 @@ var CategorySelector = React.createClass({
     this.setState({
       newCategoryName: this.props.newCategoryName
     });
+  },
+  handleTab: function(e) {
+    // Discover if the event target is the first or last focusable element
+    // within this component.
+    var modal = this.refs.modal.getDOMNode();
+    var childElementsNodeList = modal.querySelectorAll('*');
+    var childElementsArray = Array.prototype.slice.call(childElementsNodeList);
+    var focusableEl = childElementsArray.filter(function(el) {
+      return el.tabIndex === 0;
+    });
+    var firstFocusableEl = focusableEl[0];
+    var lastFocusableEl = focusableEl[focusableEl.length-1];
+    var isTargetFirst = e.target === firstFocusableEl;
+    var isTargetLast = e.target === lastFocusableEl;
+    // Loop to the last element if shift-tabbing from the first element.
+    if(isTargetFirst && e.shiftKey) {
+      e.preventDefault();
+      lastFocusableEl.focus();
+    }
+    // Loop to the first element if tabbing from the last element.
+    else if(isTargetLast && !e.shiftKey) {
+      e.preventDefault();
+      firstFocusableEl.focus();
+    }
   },
   handleOptionInputChange: function(e) {
     // Close the options.
