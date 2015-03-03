@@ -1,0 +1,33 @@
+.qn-Dialog {
+  .shadow();
+  background-color: @color-White;
+  border: unit(4/16, em) solid @color-Border;
+  display: block;
+  margin: 10vh auto;
+  max-width: 20em;
+
+  &:focus {
+    .focus();
+  }
+
+  &-title {
+  }
+
+  &-content {
+    margin: 1em;
+    padding: 0;
+  }
+
+  &-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin: 1em;
+  }
+
+  &-action {
+
+    & + & {
+      margin-left: 0.5em;
+    }
+  }
+}

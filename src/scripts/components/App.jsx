@@ -12,6 +12,8 @@ var categorizedNotesStore = require('../stores/categorizedNotes');
 var quickNotesStore = require('../stores/quickNotes');
 
 var Alert = require('./Alert');
+var Modal = require('./Modal');
+var Dialog = require('./Dialog');
 
 var App = React.createClass({
   mixins: [
@@ -21,6 +23,11 @@ var App = React.createClass({
   ],
   componentDidMount: function() {
     actions.getData();
+  },
+  getInitialState: function() {
+    return {
+      showModal: true
+    };
   },
   render: function() {
     var buttonStyle = this.state.loaded ? null : { visibility: 'hidden' };
@@ -41,10 +48,27 @@ var App = React.createClass({
             activeClassName="qn-Button--disabled">New Quick Note</Link>
           {processIndicator}
         </header>
+        <p>
+          <button className="qn-Button" onClick={this.showModal}>Show modal</button>
+        </p>
+        <Modal show={this.state.showModal} onClose={this.handleModalClose}>
+          <Dialog/>
+        </Modal>
         {error}
         {body}
       </section>
     );
+  },
+  showModal: function(e) {
+    e.preventDefault();
+    this.setState({
+      showModal: true
+    });
+  },
+  handleModalClose: function() {
+    this.setState({
+      showModal: false
+    });
   },
   renderError: function() {
     return (
