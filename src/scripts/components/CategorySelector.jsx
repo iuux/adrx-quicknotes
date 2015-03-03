@@ -53,6 +53,7 @@ var CategorySelector = React.createClass({
         <label className="qn-Label" htmlFor="toggleButton">Category</label>
         <button className={selectionClasses}
           ref="toggleButton" id="toggleButton"
+          aria-haspopup="true"
           disabled={this.props.disabled}
           onClick={this.handleToggleOptions}>
           <div className="qn-CategorySelector-selectionContent">
