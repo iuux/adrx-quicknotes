@@ -8,6 +8,7 @@ var actions = require('../actions');
 var config = require('../config');
 
 var Alert = require('./Alert');
+var Dialog = require('./Dialog');
 
 var EditCategory = React.createClass({
   mixins: [
@@ -21,6 +22,9 @@ var EditCategory = React.createClass({
       actions.getCategory(params.id);
     }
   },
+  //
+  // Store methods
+  //
   onStoreChange: function(category) {
     this.sourceState = category;
     // Holds a copy of category data to be modified by user input.
@@ -30,6 +34,9 @@ var EditCategory = React.createClass({
     // Change focus to first input field.
     this.refs.qnInput.getDOMNode().focus();
   },
+  //
+  // Render methods
+  //
   render: function() {
     // Only render if there's a state.
     if( !this.state ) {
@@ -84,28 +91,46 @@ var EditCategory = React.createClass({
   renderDeleteCategoryForm: function() {
     var isFormDisabled = this.state.requesting;
 
+    var dialogMessage = (
+      <span>
+        Are you sure you want to delete the <em>{this.state.name}</em> category and all associated Quick Notes?
+      </span>
+    );
+
     return (
-      <form className="qn-Content" onSubmit={this.handleDelete}>
-        <h2 className="qn-Content-heading">Delete category</h2>
-        <p className="qn-Content-paragraph">Delete category?</p>
-        <fieldset className="qn-Fieldset" disabled={isFormDisabled}>
+      <form
+        className="qn-Content"
+        onSubmit={this.handleDeleteDialog}>
+        <h2 className="qn-Content-heading">
+          Delete category
+        </h2>
+        <p className="qn-Content-paragraph">
+          Deleting this category will also delete all associated Quick Notes.
+        </p>
+        <fieldset
+          className="qn-Fieldset"
+          disabled={isFormDisabled}>
           <div className="qn-ActionBar">
-            <button className="qn-ActionBar-item qn-Button" type="submit">Delete</button>
+            <button
+              className="qn-ActionBar-item qn-Button"
+              type="submit">
+              Delete
+            </button>
           </div>
         </fieldset>
+        <Dialog
+          confirmationButtonLabel="Yes, delete"
+          message={dialogMessage}
+          title="Delete category"
+          onCancel={this.handleDeleteDialogCancel}
+          onConfirm={this.handleDeleteDialogConfirm}
+          show={this.state.showDeleteDialog}/>
       </form>
     );
   },
-  checkValidity: function() {
-    var hasInput, diff;
-    // Fields need input, not including whitespace.
-    hasInput = !!(this.state.name).trim().length;
-    // Input is different than source data.
-    diff = this.state.name !== this.sourceState.name;
-    // Combine validity checks.
-    this.isValid = hasInput && diff;
-    this.isInvalid = !this.isValid;
-  },
+  //
+  // Handler methods
+  //
   handleNameInputChange: function(e) {
     this.setState({
       name: e.target.value
@@ -119,6 +144,32 @@ var EditCategory = React.createClass({
       errorMessage: null
     });
   },
+  handleDeleteDialog: function(e) {
+    e.preventDefault();
+    this.setState({
+      showDeleteDialog: true
+    });
+  },
+  handleDeleteDialogCancel: function() {
+    this.setState({
+      showDeleteDialog: false
+    });
+  },
+  handleDeleteDialogConfirm: function() {
+    this.setState({
+      showDeleteDialog: false
+    });
+    //actions.deleteCategory(this.sourceState.categoryId);
+  },
+  handleCancel: function(e) {
+    if(!!e) {
+      e.preventDefault();
+    }
+    this.transitionTo('home');
+  },
+  //
+  // Action methods
+  //
   onRenameCategorySucceeded: function(id) {
     this.handleCancel();
   },
@@ -131,19 +182,22 @@ var EditCategory = React.createClass({
   onRenameCategoryFailedCallback: function() {
     this.refs.error.getDOMNode().focus();
   },
-  handleDelete: function(e) {
-    e.preventDefault();
-    actions.deleteCategory(this.sourceState.categoryId);
-  },
   onDeleteCategorySucceeded: function(id) {
     this.handleCancel();
   },
-  handleCancel: function(e) {
-    if(!!e) {
-      e.preventDefault();
-    }
-    this.transitionTo('home');
-  },
+  //
+  // Helper methods
+  //
+  checkValidity: function() {
+    var hasInput, diff;
+    // Fields need input, not including whitespace.
+    hasInput = !!(this.state.name).trim().length;
+    // Input is different than source data.
+    diff = this.state.name !== this.sourceState.name;
+    // Combine validity checks.
+    this.isValid = hasInput && diff;
+    this.isInvalid = !this.isValid;
+  }
 });
 
 module.exports = EditCategory;

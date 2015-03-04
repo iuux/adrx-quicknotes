@@ -9,6 +9,7 @@ var config = require('../config');
 
 var Alert = require('./Alert');
 var CategorySelector = require('./CategorySelector');
+var Dialog = require('./Dialog');
 
 var EditNote = React.createClass({
   mixins: [
@@ -22,6 +23,9 @@ var EditNote = React.createClass({
       actions.getNote(params.id);
     }
   },
+  //
+  // Store methods
+  //
   onStoreChange: function(note) {
     this.sourceState = note;
     // Holds a copy of source data to be modified by user input.
@@ -34,6 +38,9 @@ var EditNote = React.createClass({
     // Change focus to first input field.
     this.refs.qnInput.getDOMNode().focus();
   },
+  //
+  // Render methods
+  //
   render: function() {
     // Only render if there's a state.
     if( !this.state ) {
@@ -52,6 +59,10 @@ var EditNote = React.createClass({
     );
 
     var isFormDisabled = this.state.requesting;
+
+    var dialogMessage = (
+      <span>Delete <em>{this.state.title}</em>?</span>
+    );
 
     return (
       <form className="qn-Content" onSubmit={this.handleSubmit}>
@@ -80,11 +91,17 @@ var EditNote = React.createClass({
               {submitButtonLabel}
               {processIndicator}</button>
             <button className="qn-ActionBar-item qn-Button"
-              onClick={this.handleDelete}>Delete</button>
+              onClick={this.handleDeleteDialog}>Delete</button>
             <button className="qn-ActionBar-item qn-Button"
               onClick={this.handleCancel}>Cancel</button>
           </div>
         </fieldset>
+        <Dialog
+          confirmationButtonLabel="Yes, delete"
+          message={dialogMessage}
+          show={this.state.showDeleteDialog}
+          onCancel={this.handleDeleteDialogCancel}
+          onConfirm={this.handleDeleteDialogConfirm}/>
       </form>
     );
   },
@@ -104,6 +121,9 @@ var EditNote = React.createClass({
     this.isValid = hasInput && (inputDiff || catDiff);
     this.isInvalid = !this.isValid;
   },
+  //
+  // Handler methods
+  //
   handleTitleInputChange: function(e) {
     this.setState({
       title: e.target.value
@@ -128,6 +148,32 @@ var EditNote = React.createClass({
       errorMessage: null
     });
   },
+  handleDeleteDialog: function(e) {
+    e.preventDefault();
+    this.setState({
+      showDeleteDialog: true
+    });
+  },
+  handleDeleteDialogCancel: function() {
+    this.setState({
+      showDeleteDialog: false
+    });
+  },
+  handleDeleteDialogConfirm: function() {
+    this.setState({
+      showDeleteDialog: false
+    });
+    //actions.deleteNote(this.sourceState.quickNoteId);
+  },
+  handleCancel: function(e) {
+    if(!!e) {
+      e.preventDefault();
+    }
+    this.transitionTo('home');
+  },
+  //
+  // Action methods
+  //
   onUpdateNoteSucceeded: function(id) {
     this.handleCancel();
   },
@@ -140,18 +186,8 @@ var EditNote = React.createClass({
   onUpdateNoteFailedCallback: function() {
     this.refs.error.getDOMNode().focus();
   },
-  handleDelete: function(e) {
-    e.preventDefault();
-    actions.deleteNote(this.sourceState.quickNoteId);
-  },
   onDeleteNoteSucceeded: function(id) {
     this.handleCancel();
-  },
-  handleCancel: function(e) {
-    if(!!e) {
-      e.preventDefault();
-    }
-    this.transitionTo('home');
   }
 });
 

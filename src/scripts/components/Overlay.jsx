@@ -2,14 +2,14 @@
 
 var React = require('react');
 
-var Modal = React.createClass({
+var Overlay = React.createClass({
   //
   // Lifecycle methods
   //
   componentDidUpdate: function() {
     // Prevents main document from scrolling.
     this.preventBodyScrolling(this.props.show);
-    // Focus on first focusable element when modal opens.
+    // Focus on first focusable element when overlay opens.
     if(this.props.show) {
       var focusableEl = this.getFocusableElements();
       if(!!focusableEl.length) {
@@ -30,14 +30,14 @@ var Modal = React.createClass({
     }
 
     return (
-      <div className="qn-Modal">
+      <div className="qn-Overlay">
         <div
-          className="qn-Modal-backdrop"
+          className="qn-Overlay-backdrop"
           onClick={this.handleBackdropClick}></div>
         <div
-          className="qn-Modal-content"
+          className="qn-Overlay-content"
           onKeyDown={this.handleKeyDown}
-          ref="modal">
+          ref="content">
           {this.props.children}
         </div>
       </div>
@@ -90,8 +90,8 @@ var Modal = React.createClass({
   // Helper methods
   //
   getFocusableElements: function() {
-    var modal = this.refs.modal.getDOMNode();
-    var childElementsNodeList = modal.querySelectorAll('*');
+    var content = this.refs.content.getDOMNode();
+    var childElementsNodeList = content.querySelectorAll('*');
     var childElementsArray = Array.prototype.slice.call(childElementsNodeList);
     return childElementsArray.filter(function(el) {
       return el.tabIndex === 0;
@@ -102,4 +102,4 @@ var Modal = React.createClass({
   }
 });
 
-module.exports = Modal;
+module.exports = Overlay;

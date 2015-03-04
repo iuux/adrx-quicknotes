@@ -2,32 +2,34 @@
   .shadow();
   background-color: @color-White;
   border: unit(4/16, em) solid @color-Border;
+  box-sizing: border-box;
   display: block;
   margin: 10vh auto;
-  max-width: 20em;
-
-  &:focus {
-    .focus();
-  }
+  max-width: 30em;
+  padding: 2em;
 
   &-title {
+    font-size: @scale-FontSize--10;
+    margin: 0 0 1rem;
+    padding: 0;
   }
 
-  &-content {
-    margin: 1em;
+  &-message {
+    line-height: @scale-FontSize--20;
+    margin: 0 0 1em;
     padding: 0;
   }
 
   &-actions {
     display: flex;
     justify-content: flex-end;
-    margin: 1em;
+    margin-top: 2em;
   }
 
   &-action {
 
     & + & {
-      margin-left: 0.5em;
+      margin-left: 1em;
     }
   }
 }
