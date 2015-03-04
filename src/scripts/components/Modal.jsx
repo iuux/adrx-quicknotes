@@ -31,11 +31,13 @@ var Modal = React.createClass({
 
     return (
       <div className="qn-Modal">
-        <div className="qn-Modal-backdrop"
+        <div
+          className="qn-Modal-backdrop"
           onClick={this.handleBackdropClick}></div>
-        <div className="qn-Modal-content"
-          ref="modal"
-          onKeyDown={this.handleKeyDown}>
+        <div
+          className="qn-Modal-content"
+          onKeyDown={this.handleKeyDown}
+          ref="modal">
           {this.props.children}
         </div>
       </div>
