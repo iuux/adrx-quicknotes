@@ -1,7 +1,7 @@
 .qn-Button {
   .textShadow();
   background-color: @color-Interactive--150;
-  border: unit(2/16, em) solid @color-Interactive--400;
+  border: unit(2/16, rem) solid @color-Interactive--400;
   border-radius: 0.25em;
   color: @color-Interactive--750;
   display: inline-block;
@@ -37,6 +37,16 @@
       color: @color-Interactive--750;
       text-shadow: inherit;
     }
+  }
+
+  &--small {
+    font-size: @scale-FontSize--10i;
+    padding: unit(7/16, rem);
+  }
+
+  &--extraSmall {
+    font-size: @scale-FontSize--10i;
+    padding: unit(4/16, rem);
   }
 
   &--disabled,
