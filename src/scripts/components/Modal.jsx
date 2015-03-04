@@ -3,9 +3,12 @@
 var React = require('react');
 
 var Modal = React.createClass({
+  //
+  // Lifecycle methods
+  //
   componentDidUpdate: function() {
     // Prevents main document from scrolling.
-    document.body.style.overflow = this.props.show ? 'hidden' : '';
+    this.preventBodyScrolling(this.props.show);
     // Focus on first focusable element when modal opens.
     if(this.props.show) {
       var focusableEl = this.getFocusableElements();
@@ -14,6 +17,12 @@ var Modal = React.createClass({
       }
     }
   },
+  componentWillUnmount: function() {
+    this.preventBodyScrolling(false);
+  },
+  //
+  // Render methods
+  //
   render: function() {
     // Render nothing if hidden.
     if(!this.props.show) {
@@ -32,6 +41,9 @@ var Modal = React.createClass({
       </div>
     );
   },
+  //
+  // Handler methods
+  //
   handleBackdropClick: function(e) {
     this.handleCancel(e);
   },
@@ -72,6 +84,9 @@ var Modal = React.createClass({
       firstFocusableEl.focus();
     }
   },
+  //
+  // Helper methods
+  //
   getFocusableElements: function() {
     var modal = this.refs.modal.getDOMNode();
     var childElementsNodeList = modal.querySelectorAll('*');
@@ -79,6 +94,9 @@ var Modal = React.createClass({
     return childElementsArray.filter(function(el) {
       return el.tabIndex === 0;
     });
+  },
+  preventBodyScrolling: function(preventScroll) {
+    document.body.style.overflow = preventScroll ? 'hidden' : '';
   }
 });
 
