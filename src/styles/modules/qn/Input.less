@@ -1,8 +1,17 @@
+.qn-Input[type], // Fixes for specificity issues.
 .qn-Input {
   border: unit(1/16, em) solid @color-Interactive--400;
   box-sizing: border-box;
   padding: 0.5em;
   width: 100%;
+  // Fixes for specificity issues.
+  border-radius: 0;
+  box-shadow: none;
+  color: inherit;
+  font-size: 16px;
+  height: auto;
+  line-height: 1;
+  margin: 0;
 
   &:focus {
     .focus();

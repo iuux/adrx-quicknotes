@@ -1,13 +1,17 @@
 .qn-Content {
   padding: 1.5em 1em 1em;
+  // Fixes for specificity issues.
+  margin: 0;
 
   &-heading {
     font-size: @scale-FontSize--10;
     margin: 0;
     padding: 0;
+    // Fixes for specificity issues.
+    line-height: 1;
   }
 
   &-paragraph {
-    margin-bottom: 0;
+    margin: 0;
   }
 }
