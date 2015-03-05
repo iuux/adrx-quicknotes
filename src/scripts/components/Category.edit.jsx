@@ -53,43 +53,76 @@ var EditCategory = React.createClass({
     );
   },
   renderRenameCategoryForm: function() {
-    var isSubmitDisabled = this.isInvalid;
-    var submitButtonLabel = this.state.requesting ? 'Renaming' : 'Rename';
-    var processIndicator = this.state.requesting ? (<span className="qn-ProcessIndicator"/>) : null;
-
-    var hasError = !!this.state.errorMessage;
-    var error = !hasError ? null : (
-      <Alert type="error" ref="error" message={this.state.errorMessage}/>
+    var submitButtonLabel = !this.state.requestingSubmit ? 'Rename' : (
+      <span>Renaming <span className="qn-ProcessIndicator"/></span>
     );
 
-    var isFormDisabled = this.state.requesting;
+    var error = !this.state.submitErrorMessage ? null : (
+      <Alert
+        message={this.state.submitErrorMessage}
+        ref="renameError"
+        type="error"/>
+    );
+
+    var isFormDisabled = this.state.requestingSubmit;
 
     return (
-      <form className="qn-Content" onSubmit={this.handleRename}>
-        <h2 className="qn-Content-heading">Edit category</h2>
-        <fieldset className="qn-Fieldset" disabled={isFormDisabled}>
+      <form
+        className="qn-Content"
+        onSubmit={this.handleRename}>
+        <h2 className="qn-Content-heading">
+          Edit category
+        </h2>
+        <fieldset
+          className="qn-Fieldset"
+          disabled={isFormDisabled}>
           {error}
-          <label className="qn-Label" for="qn-Input">Name</label>
-          <input className="qn-Input" id="qn-Input" type="text" required
-            ref="qnInput" autoFocus
+          <label
+            className="qn-Label"
+            for="qn-Input">
+            Name
+          </label>
+          <input
+            autoFocus
+            className="qn-Input"
+            disabled={this.state.requesting}
+            id="qn-Input"
             maxLength={config.CATEGORY_NAME_MAXLENGTH}
-            value={this.state.name}
             onChange={this.handleNameInputChange}
-            disabled={this.state.requesting}/>
+            ref="qnInput"
+            required
+            type="text"
+            value={this.state.name}/>
           <div className="qn-ActionBar">
-            <button className="qn-ActionBar-item qn-Button" type="submit"
-              disabled={isSubmitDisabled}>
+            <button
+              className="qn-ActionBar-item qn-Button"
+              disabled={this.isInvalid}
+              type="submit">
               {submitButtonLabel}
-              {processIndicator}</button>
-            <button className="qn-ActionBar-item qn-Button"
-              onClick={this.handleCancel}>Cancel</button>
+            </button>
+            <button
+              className="qn-ActionBar-item qn-Button"
+              onClick={this.handleCancel}>
+              Cancel
+            </button>
           </div>
         </fieldset>
       </form>
     );
   },
   renderDeleteCategoryForm: function() {
-    var isFormDisabled = this.state.requesting;
+    var deleteButtonLabel = !this.state.requestingDelete ? 'Delete' : (
+      <span>Deleting <span className="qn-ProcessIndicator"/></span>
+    );
+
+    var error = !this.state.deleteErrorMessage ? null : (
+      <Alert
+        message={this.state.deleteErrorMessage}
+        ref="deleteError"
+        type="error"/>
+    );
+
+    var isFormDisabled = this.state.requestingDelete;
 
     var dialogMessage = (
       <span>
@@ -104,17 +137,18 @@ var EditCategory = React.createClass({
         <h2 className="qn-Content-heading">
           Delete category
         </h2>
-        <p className="qn-Content-paragraph">
-          Deleting this category will also delete all associated Quick Notes.
-        </p>
         <fieldset
           className="qn-Fieldset"
           disabled={isFormDisabled}>
+          {error}
+          <p className="qn-Content-paragraph">
+            Deleting this category will also delete all associated Quick Notes.
+          </p>
           <div className="qn-ActionBar">
             <button
               className="qn-ActionBar-item qn-Button"
               type="submit">
-              Delete
+              {deleteButtonLabel}
             </button>
           </div>
         </fieldset>
@@ -140,14 +174,15 @@ var EditCategory = React.createClass({
     e.preventDefault();
     actions.renameCategory(this.sourceState.categoryId, this.state.name);
     this.setState({
-      requesting: true,
-      errorMessage: null
+      requestingSubmit: true,
+      submitErrorMessage: null
     });
   },
   handleDeleteDialog: function(e) {
     e.preventDefault();
     this.setState({
-      showDeleteDialog: true
+      showDeleteDialog: true,
+      deleteErrorMessage: null
     });
   },
   handleDeleteDialogCancel: function() {
@@ -157,9 +192,10 @@ var EditCategory = React.createClass({
   },
   handleDeleteDialogConfirm: function() {
     this.setState({
+      requestingDelete: true,
       showDeleteDialog: false
     });
-    //actions.deleteCategory(this.sourceState.categoryId);
+    actions.deleteCategory(this.sourceState.categoryId);
   },
   handleCancel: function(e) {
     if(!!e) {
@@ -175,15 +211,22 @@ var EditCategory = React.createClass({
   },
   onRenameCategoryFailed: function(message) {
     this.setState({
-      requesting: false,
-      errorMessage: message
-    }, this.onRenameCategoryFailedCallback);
-  },
-  onRenameCategoryFailedCallback: function() {
-    this.refs.error.getDOMNode().focus();
+      requestingSubmit: false,
+      submitErrorMessage: message
+    }, function() {
+      this.refs.renameError.getDOMNode().focus();
+    });
   },
   onDeleteCategorySucceeded: function(id) {
     this.handleCancel();
+  },
+  onDeleteCategoryFailed: function(message) {
+    this.setState({
+      requestingDelete: false,
+      deleteErrorMessage: message
+    }, function() {
+      this.refs.deleteError.getDOMNode().focus();
+    });
   },
   //
   // Helper methods

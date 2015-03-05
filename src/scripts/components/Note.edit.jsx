@@ -49,51 +49,88 @@ var EditNote = React.createClass({
 
     this.checkValidity();
 
-    var isSubmitDisabled = this.isInvalid;
-    var submitButtonLabel = this.state.requesting ? 'Saving' : 'Save';
-    var processIndicator = this.state.requesting ? (<span className="qn-ProcessIndicator"/>) : null;
-
-    var hasError = !!this.state.errorMessage;
-    var error = !hasError ? null : (
-      <Alert type="error" ref="error" message={this.state.errorMessage}/>
+    var submitButtonLabel = !this.state.requestingSubmit ? 'Save' : (
+      <span>Saving <span className="qn-ProcessIndicator"/></span>
     );
 
-    var isFormDisabled = this.state.requesting;
+    var deleteButtonLabel = !this.state.requestingDelete ? 'Delete' : (
+      <span>Deleting <span className="qn-ProcessIndicator"/></span>
+    );
+
+    var error = !this.state.errorMessage ? null : (
+      <Alert
+        message={this.state.errorMessage}
+        ref="error"
+        type="error"/>
+    );
+
+    var isFormDisabled = this.state.requestingSubmit || this.state.requestingDelete;
 
     var dialogMessage = (
       <span>Delete <em>{this.state.title}</em>?</span>
     );
 
     return (
-      <form className="qn-Content" onSubmit={this.handleSubmit}>
-        <h2 className="qn-Content-heading">Edit Quick Note</h2>
-        <fieldset className="qn-Fieldset" disabled={isFormDisabled}>
+      <form
+        className="qn-Content"
+        onSubmit={this.handleSubmit}>
+        <h2 className="qn-Content-heading">
+          Edit Quick Note
+        </h2>
+        <fieldset
+          className="qn-Fieldset"
+          disabled={isFormDisabled}>
           {error}
-          <label className="qn-Label" htmlFor="qn-Input">Title</label>
-          <input className="qn-Input" id="qn-Input" type="text" required
-            ref="qnInput" autoFocus
+          <label
+            className="qn-Label"
+            htmlFor="qn-Input">
+            Title
+          </label>
+          <input
+            autoFocus
+            className="qn-Input"
+            id="qn-Input"
             maxLength={config.NOTE_TITLE_MAXLENGTH}
-            value={this.state.title}
-            onChange={this.handleTitleInputChange}/>
+            onChange={this.handleTitleInputChange}
+            ref="qnInput"
+            required
+            type="text"
+            value={this.state.title}/>
           <CategorySelector
-            selectedCategoryId={this.state.categoryId}
+            disabled={isFormDisabled}
             newCategoryName={this.state.newCategoryName}
             onChange={this.handleCategorySelectorChange}
-            disabled={isFormDisabled}/>
-          <label className="qn-Label" htmlFor="qn-Note">Note</label>
-          <textarea className="qn-Input qn-Input--textarea" id="qn-Note" required
+            selectedCategoryId={this.state.categoryId}/>
+          <label
+            className="qn-Label"
+            htmlFor="qn-Note">
+            Note
+          </label>
+          <textarea
+            className="qn-Input qn-Input--textarea"
+            id="qn-Note"
             maxLength={config.NOTE_BODY_MAXLENGTH}
-            value={this.state.body}
-            onChange={this.handleNoteInputChange}></textarea>
+            onChange={this.handleNoteInputChange}
+            required
+            value={this.state.body}>
+          </textarea>
           <div className="qn-ActionBar">
-            <button className="qn-ActionBar-item qn-Button qn-Button--primary" type="submit"
-              disabled={isSubmitDisabled}>
+            <button
+              className="qn-ActionBar-item qn-Button qn-Button--primary"
+              disabled={this.isInvalid}
+              type="submit">
               {submitButtonLabel}
-              {processIndicator}</button>
-            <button className="qn-ActionBar-item qn-Button"
-              onClick={this.handleDeleteDialog}>Delete</button>
-            <button className="qn-ActionBar-item qn-Button"
-              onClick={this.handleCancel}>Cancel</button>
+            </button>
+            <button
+              className="qn-ActionBar-item qn-Button"
+              onClick={this.handleDeleteDialog}>
+              {deleteButtonLabel}
+            </button>
+            <button
+              className="qn-ActionBar-item qn-Button"
+              onClick={this.handleCancel}>
+              Cancel
+            </button>
           </div>
         </fieldset>
         <Dialog
@@ -144,7 +181,7 @@ var EditNote = React.createClass({
     e.preventDefault();
     actions.updateNote(this.sourceState.quickNoteId, this.state);
     this.setState({
-      requesting: true,
+      requestingSubmit: true,
       errorMessage: null
     });
   },
@@ -161,9 +198,10 @@ var EditNote = React.createClass({
   },
   handleDeleteDialogConfirm: function() {
     this.setState({
+      requestingDelete: true,
       showDeleteDialog: false
     });
-    //actions.deleteNote(this.sourceState.quickNoteId);
+    actions.deleteNote(this.sourceState.quickNoteId);
   },
   handleCancel: function(e) {
     if(!!e) {
@@ -179,15 +217,24 @@ var EditNote = React.createClass({
   },
   onUpdateNoteFailed: function(message) {
     this.setState({
-      requesting: false,
+      requestingSubmit: false,
       errorMessage: message
-    }, this.onUpdateNoteFailedCallback);
+    }, this.setFocusToError);
   },
-  onUpdateNoteFailedCallback: function() {
-    this.refs.error.getDOMNode().focus();
-  },
-  onDeleteNoteSucceeded: function(id) {
+  onDeleteNoteSucceeded: function() {
     this.handleCancel();
+  },
+  onDeleteNoteFailed: function(message) {
+    this.setState({
+      requestingDelete: false,
+      errorMessage: message
+    }, this.setFocusToError);
+  },
+  //
+  // Helper methods
+  //
+  setFocusToError: function() {
+    this.refs.error.getDOMNode().focus();
   }
 });
 
