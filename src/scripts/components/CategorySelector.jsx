@@ -12,12 +12,24 @@ var CategorySelector = React.createClass({
   mixins: [
     Reflux.connect(categorizedNotesStore, 'categorizedNotes')
   ],
+  //
+  // Lifecycle methods
+  //
+  componentWillMount: function() {
+    document.addEventListener('click', this.handleBodyClick);
+  },
+  componentWillUnmount: function() {
+    document.removeEventListener('click', this.handleBodyClick);
+  },
   getInitialState: function() {
     return {
       showOptions: false,
       newCategoryName: this.props.newCategoryName
     };
   },
+  //
+  // Render methods
+  //
   render: function() {
     var isNewCategorySelected = !!this.props.newCategoryName;
     var isUncategoriedSelected = !isNewCategorySelected && !this.props.selectedCategoryId;
@@ -50,15 +62,25 @@ var CategorySelector = React.createClass({
 
     return (
       <div className="qn-CategorySelector">
-        <label className="qn-Label" htmlFor="toggleButton">Category</label>
-        <button className={selectionClasses}
-          ref="toggleButton" id="toggleButton"
+        <label
+          className="qn-Label"
+          htmlFor="toggleButton">
+          Category
+        </label>
+        <button
           aria-haspopup="true"
+          className={selectionClasses}
           disabled={this.props.disabled}
-          onClick={this.handleToggleOptions}>
+          id="toggleButton"
+          onClick={this.handleToggleOptions}
+          ref="toggleButton">
           <div className="qn-CategorySelector-selectionContent">
-            <span className="qn-CategorySelector-selectionText">{selectedName}</span>
-            <Icon name="caret-bottom" className="qn-CategorySelector-icon"/>
+            <span className="qn-CategorySelector-selectionText">
+              {selectedName}
+            </span>
+            <Icon
+              className="qn-CategorySelector-icon"
+              name="caret-bottom"/>
           </div>
         </button>
         {options}
@@ -77,30 +99,36 @@ var CategorySelector = React.createClass({
     var newCategoryIcon = isNewCategorySelected ? (<Icon name="check"/>) : null;
 
     return (
-      <div>
-        <div className="qn-CategorySelector-backdrop"
-          onClick={this.handleBackdropClick}></div>
-        <fieldset className="qn-CategorySelector-options"
-          ref="modal"
-          onKeyDown={this.handleKeyDown}>
-          <legend className="qn-CategorySelector-legend">Select category</legend>
-          {categoryList}
-          {unspecifiedCategory}
-          <div className="qn-CategorySelector-option qn-CategorySelector-option--newCategory">
-            <label className="qn-CategorySelector-label"
-              htmlFor="newCategoryInput">
-              <span className='qn-CategorySelector-labelText'>New category</span>
-              {newCategoryIcon}
-            </label>
-            <input className="qn-Input" type="text"
-              id="newCategoryInput" ref="newCategoryInput"
-              maxLength={config.CATEGORY_NAME_MAXLENGTH}
-              onChange={this.handleNewCategoryInputChange}
-              onKeyDown={this.handleNewCategoryInputKeyDown}
-              value={this.state.newCategoryName}/>
-          </div>
-        </fieldset>
-      </div>
+      <fieldset
+        className="qn-CategorySelector-options"
+        onKeyDown={this.handleKeyDown}
+        ref="overlay"
+        tabIndex="0">
+        <legend className="qn-CategorySelector-legend">
+          Select category
+        </legend>
+        {categoryList}
+        {unspecifiedCategory}
+        <div className="qn-CategorySelector-option qn-CategorySelector-option--newCategory">
+          <label
+            className="qn-CategorySelector-label"
+            htmlFor="newCategoryInput">
+            <span className='qn-CategorySelector-labelText'>
+              New category
+            </span>
+            {newCategoryIcon}
+          </label>
+          <input
+            className="qn-Input"
+            id="newCategoryInput"
+            maxLength={config.CATEGORY_NAME_MAXLENGTH}
+            onChange={this.handleNewCategoryInputChange}
+            onKeyDown={this.handleNewCategoryInputKeyDown}
+            ref="newCategoryInput"
+            type="text"
+            value={this.state.newCategoryName}/>
+        </div>
+      </fieldset>
     );
   },
   renderCategoryInput: function(category) {
@@ -137,24 +165,45 @@ var CategorySelector = React.createClass({
       </div>
     );
   },
+  //
+  // Handler methods
+  //
+  handleBodyClick: function(e) {
+    // Ignore if the component is closed.
+    if(!this.state.showOptions) {
+      return;
+    }
+    // Ignore if the click occurs within the overlay.
+    if(this.refs.overlay.getDOMNode().contains(e.target)) {
+      return;
+    }
+    // Ignore if the click occurs within the button.
+    if(this.refs.toggleButton.getDOMNode().contains(e.target)) {
+      return;
+    }
+    // Cancel the open component.
+    this.handleCancel();
+  },
   handleToggleOptions: function(e) {
-    e.preventDefault();
+    if(!!e) {
+      e.preventDefault();
+    }
     this.setState({
       showOptions: !this.state.showOptions
-    }, this.toggleOptionsRenderCallback);
-  },
-  toggleOptionsRenderCallback: function() {
-    if(this.state.showOptions) {
-      // Put focus on the appropriate input.
-      var newCategoryRefId = 'newCategoryInput';
-      var categoryRefId = 'category' + this.props.selectedCategoryId;
-      var refId = !!this.props.newCategoryName ? newCategoryRefId : categoryRefId;
-      this.refs[refId].getDOMNode().focus();
-    }
-    else {
-      // Put focus back on the button.
-      this.refs.toggleButton.getDOMNode().focus();
-    }
+    }, function() {
+      if(this.state.showOptions) {
+        // Put focus on the appropriate input.
+        var newCategoryRefId = 'newCategoryInput';
+        var categoryRefId = 'category' + this.props.selectedCategoryId;
+        var refId = !!this.props.newCategoryName ? newCategoryRefId : categoryRefId;
+        this.refs[refId].getDOMNode().focus();
+      }
+      else if(!!e) {
+        // Put focus back on the button.
+        // But ignore if user clicked away to close.
+        this.refs.toggleButton.getDOMNode().focus();
+      }
+    });
   },
   handleBackdropClick: function(e) {
     this.handleCancel(e);
@@ -180,8 +229,8 @@ var CategorySelector = React.createClass({
   handleTab: function(e) {
     // Discover if the event target is the first or last focusable element
     // within this component.
-    var modal = this.refs.modal.getDOMNode();
-    var childElementsNodeList = modal.querySelectorAll('*');
+    var overlay = this.refs.overlay.getDOMNode();
+    var childElementsNodeList = overlay.querySelectorAll('*');
     var childElementsArray = Array.prototype.slice.call(childElementsNodeList);
     var focusableEl = childElementsArray.filter(function(el) {
       return el.tabIndex === 0;
@@ -253,6 +302,9 @@ var CategorySelector = React.createClass({
     // Create a new category.
     this.selectCategoryName(newCategoryName);
   },
+  //
+  // Helper methods
+  //
   selectCategoryId: function(id) {
     id = id == '0' ? 0 : id;
     // Inform the parent component about the change.
