@@ -30,13 +30,15 @@ var Overlay = React.createClass({
     }
 
     return (
-      <div className="qn-Overlay">
+      <div
+        className="qn-Overlay"
+        onKeyDown={this.handleKeyDown}
+        tabIndex="0">
         <div
           className="qn-Overlay-backdrop"
           onClick={this.handleBackdropClick}></div>
         <div
           className="qn-Overlay-content"
-          onKeyDown={this.handleKeyDown}
           ref="content">
           {this.props.children}
         </div>
