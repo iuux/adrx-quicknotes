@@ -2,7 +2,7 @@
 
 module.exports = {
   api: function(method) {
-    var url = false ? 'http://156.56.176.66:8080/sisaarex-dev/adrx/portal.do' : '';
+    var url = true ? 'http://156.56.176.66:8080/sisaarex-dev/adrx/portal.do' : '';
     return url + '?methodToCall=' + method;
   },
   // http://codereview.stackexchange.com/a/10396
