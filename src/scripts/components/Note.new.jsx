@@ -18,6 +18,16 @@ var NewNote = React.createClass({
   //
   // Lifecycle methods
   //
+  componentDidMount: function() {
+    // Replace the textarea with a CKEditor instance.
+    this.editor = window.CKEDITOR.replace('qn-Note', config.CKEDITOR);
+    this.editor.on('change', this.handleNoteInputChange);
+  },
+  componentWillUnmount: function() {
+    // Destroy the CKEditor instance.
+    // Destroying will also remove any event listeners.
+    this.editor.destroy();
+  },
   getInitialState: function() {
     return {
       title: '',
@@ -85,7 +95,6 @@ var NewNote = React.createClass({
             className="qn-Input qn-Input--textarea"
             id="qn-Note"
             maxLength={config.NOTE_BODY_MAXLENGTH}
-            onChange={this.handleNoteInputChange}
             required
             value={this.state.body}>
           </textarea>
@@ -121,8 +130,9 @@ var NewNote = React.createClass({
     });
   },
   handleNoteInputChange: function(e) {
+    var value = e.editor.getData();
     this.setState({
-      body: e.target.value
+      body: value
     });
   },
   handleSubmit: function(e) {
