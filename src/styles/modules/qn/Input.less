@@ -1,4 +1,4 @@
-.qn-Input[type], // Fixes for specificity issues.
+.qn-Input[type], // Fix for specificity issues.
 .qn-Input {
   border: unit(1/16, em) solid @color-Interactive--400;
   box-sizing: border-box;
@@ -12,13 +12,19 @@
   height: auto;
   line-height: 1;
   margin: 0;
+
+  &:focus {
+    .focus();
+    // Fixes for specificity issues.
+    border-color: inherit;
+  }
 }
 
 .qn-Input {
-  &:focus {
-    .focus();
-  }
 
+  &--disabled[type], // Fix for specificity issues.
+  &[disabled][type], // Fix for specificity issues.
+  fieldset[disabled] &[type], // Fix for specificity issues.
   &--disabled,
   &[disabled],
   fieldset[disabled] & {
@@ -28,6 +34,7 @@
     -webkit-text-fill-color: @color-Text--400;
   }
 
+  &--textarea[type], // Fix for specificity issues.
   &--textarea {
     line-height: 1.4;
     min-height: 10em;
