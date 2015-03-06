@@ -127,10 +127,27 @@ var quickNotesStore = Reflux.createStore({
   // Notes
   //
   onCreateNote: function(note) {
+    // Clean input.
     note.title = note.title.trim();
     note.body = note.body.trim();
+
     // Create category, if needed.
     var shouldCreateNewCategory = !!note.newCategoryName && !!note.newCategoryName.length;
+
+    // Error if there are existing notes with the same title in the same category.
+    if(!shouldCreateNewCategory) {
+      var notesWithDuplicateTitles = this.objectToArray(this.data.notes)
+        .filter(function(aNote) {
+          var isDuplicate = aNote.title.toLowerCase() == note.title.toLowerCase();
+          var isInSameCategory = aNote.categoryId == note.categoryId;
+          return isDuplicate && isInSameCategory;
+        });
+      var isDuplicateTitle = !!notesWithDuplicateTitles.length;
+      if(isDuplicateTitle) {
+        actions.createNoteFailed('Note title already exists in this category.');
+        return;
+      }
+    }
 
     var query = this.getQueryParams();
     query.quick_note_title = note.title;
@@ -164,22 +181,24 @@ var quickNotesStore = Reflux.createStore({
     note.title = note.title.trim();
     note.body = note.body.trim();
 
-    // Error if there are existing notes with the same title in the same category.
-    var notesWithDuplicateTitles = this.objectToArray(this.data.notes)
-      .filter(function(aNote) {
-        var isNotItself = aNote.quickNoteId != note.quickNoteId;
-        var isDuplicate = aNote.title.toLowerCase() == note.title.toLowerCase();
-        var isInSameCategory = aNote.categoryId == note.categoryId;
-        return isNotItself && isDuplicate && isInSameCategory;
-      });
-    var isDuplicateTitle = !!notesWithDuplicateTitles.length;
-    if(isDuplicateTitle) {
-      actions.updateNoteFailed('Note title already exists in this category.');
-      return;
-    }
-
     // Create category, if needed.
     var shouldCreateNewCategory = !!note.newCategoryName && !!note.newCategoryName.length;
+
+    // Error if there are existing notes with the same title in the same category.
+    if(!shouldCreateNewCategory) {
+      var notesWithDuplicateTitles = this.objectToArray(this.data.notes)
+        .filter(function(aNote) {
+          var isNotItself = aNote.quickNoteId != note.quickNoteId;
+          var isDuplicate = aNote.title.toLowerCase() == note.title.toLowerCase();
+          var isInSameCategory = aNote.categoryId == note.categoryId;
+          return isNotItself && isDuplicate && isInSameCategory;
+        });
+      var isDuplicateTitle = !!notesWithDuplicateTitles.length;
+      if(isDuplicateTitle) {
+        actions.updateNoteFailed('Note title already exists in this category.');
+        return;
+      }
+    }
 
     var query = this.getQueryParams();
     query.quick_note_id = id;
