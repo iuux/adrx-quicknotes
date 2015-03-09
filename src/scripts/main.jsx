@@ -12,7 +12,7 @@ var NewNote = require('./components/Note.new');
 var EditNote = require('./components/Note.edit');
 
 var routes = (
-  <Route handler={App}>
+  <Route handler={App} ignoreScrollBehavior>
     <DefaultRoute name="home" handler={Home} />
     <Route name="category.edit" handler={EditCategory} path="/category/edit/:id" />
     <Route name="note.new" handler={NewNote} path="/note/new" />
