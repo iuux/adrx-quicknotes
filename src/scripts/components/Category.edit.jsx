@@ -79,7 +79,7 @@ var EditCategory = React.createClass({
           {error}
           <label
             className="qn-Label"
-            for="qn-Input">
+            htmlFor="qn-Input">
             Name
           </label>
           <input
