@@ -96,7 +96,20 @@ var Overlay = React.createClass({
     var childElementsNodeList = content.querySelectorAll('*');
     var childElementsArray = Array.prototype.slice.call(childElementsNodeList);
     return childElementsArray.filter(function(el) {
-      return el.tabIndex === 0;
+      var index = null;
+      // Rely on the tabIndex value if one is explicitly set.
+      if(el.hasAttribute('tabindex')) {
+        index = el.tabIndex;
+      }
+      // Because IE doesn't return proper tabIndex values, we have to be explicit.
+      // http://nemisj.com/focusable/
+      else {
+        var focusable = 'a body button frame iframe img input object select textarea'.split(' ');
+        var nodeName = el.nodeName.toLowerCase();
+        var isFocusable = focusable.indexOf(nodeName) !== -1;
+        index = isFocusable ? 0 : -1;
+      }
+      return index === 0;
     });
   },
   preventBodyScrolling: function(preventScroll) {
