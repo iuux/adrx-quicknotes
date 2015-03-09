@@ -17,6 +17,7 @@ module.exports = {
   CKEDITOR: {
     contentsCss: styleSheetPath,
     bodyClass: 'qn-Editor-content',
+    height: '26em',
     uiColor: '#E1D8B7'
   }
 };
