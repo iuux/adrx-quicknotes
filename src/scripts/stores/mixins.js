@@ -11,7 +11,11 @@ module.exports = {
     var map = {};
 
     query.replace(/([^&=]+)=?([^&]*)(?:&+|$)/g, function(match, key, value) {
-      map[decodeURIComponent(key)] = decodeURIComponent(value);
+      var key = decodeURIComponent(key);
+      if(key !== 'sr') {
+        return;
+      }
+      map[key] = decodeURIComponent(value);
     });
 
     return map;
