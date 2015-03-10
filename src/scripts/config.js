@@ -7,8 +7,9 @@ var styleSheet = styleSheets.filter(function(style) {
 })[0];
 var styleSheetPath = styleSheet.href;
 
-module.exports = {
+var config = {
   // Constants
+  API_URL: '',
   CATEGORY_NAME_MAXLENGTH: 20,
   NOTE_TITLE_MAXLENGTH: 20,
   NOTE_BODY_MAXLENGTH: 1000,
@@ -21,3 +22,13 @@ module.exports = {
     uiColor: '#E1D8B7'
   }
 };
+
+// Override local config with global config.
+var globalConfig = window.qnConfig;
+if(!!globalConfig) {
+  for(var key in globalConfig) {
+    config[key] = globalConfig[key];
+  }
+}
+
+module.exports = config;

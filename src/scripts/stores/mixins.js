@@ -1,9 +1,10 @@
 'use strict';
 
+var config = require('../config');
+
 module.exports = {
   api: function(method) {
-    var url = true ? 'http://156.56.176.66:8080/sisaarex-dev/adrx/portal.do' : '';
-    return url + '?methodToCall=' + method;
+    return config.API_URL + '?methodToCall=' + method;
   },
   // http://codereview.stackexchange.com/a/10396
   getQueryParams: function() {
