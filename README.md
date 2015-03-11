@@ -41,6 +41,11 @@ In the edit view of a category, if the category ID in the URL isn't found (e.g. 
 ERROR: Category not found (id: 2)
 ```
 
-### Categorized notes
+### Categorizing notes
 
 In the navigation list, categories are sorted alphabetically, ignoring letter case. The *Unspecified* category is placed last. Notes are sorted sorted alphabetically, ignoring letter case, within their respective category.
+
+### Renaming a category
+
+- A category can't be named *Unspecified*, ignoring letter case.
+- A category can't be named the same as another category.
