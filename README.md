@@ -56,7 +56,7 @@ gulp
 
 - Extraneous whitespace will be trimmed from new category name input.
 - Select the *Unspecified* category if attemping to create a category with no new category name input.
-- Select the *Unspecified* category if attempting to create a cateogry and the new category name input matches the *Unspecified* category name, ignoring letter casing.
+- Select the *Unspecified* category if attempting to create a category and the new category name input matches the *Unspecified* category name, ignoring letter casing.
 - Select an exisiting category if attempting to create a category and the new category name input matches an exisiting category name, ignoring letter casing.
 - Keying `Escape` or clicking away from the component will close the component and remove any user input in the *New Category Name* input field.
 - Keying `Enter` when focused on a category will select that category.
