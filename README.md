@@ -49,6 +49,8 @@ In the navigation list, categories are sorted alphabetically, ignoring letter ca
 
 - A category can't be named *Unspecified*, ignoring letter case.
 - A category can't be named the same as another category.
+- A category name must contain non-whitespace characters.
+- A category cannot be renamed to the same name as itself. Different letter casing is permitted.
 
 ### Creating or editing a note
 
@@ -64,3 +66,7 @@ In the navigation list, categories are sorted alphabetically, ignoring letter ca
 - Keying `Escape` or clicking away from the component will close the component and remove any user input in the *New Category Name* input field.
 - Keying `Enter` when focused on a category will select that category.
 - Keying `Enter` when focused on the *New Category Name* input field will attempt to create that category.
+
+### Deleting a note or category
+
+- Attemping to delete a note or category will activate a dialog to confirm the action.
