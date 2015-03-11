@@ -23,7 +23,7 @@ gulp
 
 ### Retrieving data
 
-- Console displays an error if a note's category ID isn't in the supplied data feed, such as `DATABASE ERROR: Category does not exist (id: 2)`.
+- The console displays an error if a note's category ID isn't in the supplied data feed, such as `DATABASE ERROR: Category does not exist (id: 2)`.
 
 ### Listing notes
 
