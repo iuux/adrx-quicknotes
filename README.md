@@ -49,3 +49,18 @@ In the navigation list, categories are sorted alphabetically, ignoring letter ca
 
 - A category can't be named *Unspecified*, ignoring letter case.
 - A category can't be named the same as another category.
+
+### Creating or editing a note
+
+- Extraneous whitespace will be trimmed from the note title and body text.
+- Note titles cannot match other note titles within the category it will be placed, ignoring letter case.
+
+### Selecting a category
+
+- Extraneous whitespace will be trimmed from new category name input.
+- Select the *Unspecified* category if attemping to create a category with no new category name input.
+- Select the *Unspecified* category if attempting to create a cateogry and the new category name input matches the *Unspecified* category name, ignoring letter casing.
+- Select an exisiting category if attempting to create a category and the new category name input matches an exisiting category name, ignoring letter casing.
+- Keying `Escape` or clicking away from the component will close the component and remove any user input in the *New Category Name* input field.
+- Keying `Enter` when focused on a category will select that category.
+- Keying `Enter` when focused on the *New Category Name* input field will attempt to create that category.
