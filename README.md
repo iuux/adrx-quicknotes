@@ -64,8 +64,8 @@ gulp
 
 ### Renaming a category
 
-- A category can't be named *Unspecified*, ignoring letter case.
-- A category can't be named the same as another category.
+- A category can't be renamed to *Unspecified*, ignoring letter case.
+- A category can't be renamed to the same as another category.
 - A category name must contain non-whitespace characters.
 - A category cannot be renamed to the same name as itself. Different letter casing is permitted.
 - If the category ID in the URL isn't found (e.g. `#/category/edit/2`), the console displays an error, such as `ERROR: Category not found (id: 2)`.
