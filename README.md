@@ -25,9 +25,9 @@ gulp
 
 - Console displays an error if a note's category ID isn't in the supplied data feed, such as `DATABASE ERROR: Category does not exist (id: 2)`.
 
-### Categorizing notes
+### Listing notes
 
-In the navigation list, categories are sorted alphabetically, ignoring letter case. The *Unspecified* category is placed last. Notes are sorted sorted alphabetically, ignoring letter case, within their respective category.
+- Notes are sorted sorted alphabetically, ignoring letter case, within their respective category.
 
 ### Creating a note
 
@@ -46,6 +46,11 @@ In the navigation list, categories are sorted alphabetically, ignoring letter ca
 ### Deleting a note
 
 - Attemping to delete a note will activate a dialog to confirm the action.
+
+### Listing categories
+
+- User-generated categories are sorted alphabetically, ignoring letter case.
+- The *Unspecified* category is placed after any user-generated categories.
 
 ### Selecting a category
 
