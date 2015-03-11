@@ -23,39 +23,29 @@ gulp
 
 ### Retrieving data
 
-Console displays an error if a note's category ID isn't in the supplied data feed. Example:
-
-```
-DATABASE ERROR: Category does not exist (id: 2)
-```
-
-In the edit view of a note, if the note ID in the URL isn't found (e.g. `#/note/edit/3`), the console displays an error. Example:
-
-```
-ERROR: Quick Note not found (id: 3)
-```
-
-In the edit view of a category, if the category ID in the URL isn't found (e.g. `#/category/edit/2`), the console displays an error. Example:
-
-```
-ERROR: Category not found (id: 2)
-```
+- Console displays an error if a note's category ID isn't in the supplied data feed, such as `DATABASE ERROR: Category does not exist (id: 2)`.
 
 ### Categorizing notes
 
 In the navigation list, categories are sorted alphabetically, ignoring letter case. The *Unspecified* category is placed last. Notes are sorted sorted alphabetically, ignoring letter case, within their respective category.
 
-### Renaming a category
-
-- A category can't be named *Unspecified*, ignoring letter case.
-- A category can't be named the same as another category.
-- A category name must contain non-whitespace characters.
-- A category cannot be renamed to the same name as itself. Different letter casing is permitted.
-
-### Creating or editing a note
+### Creating a note
 
 - Extraneous whitespace will be trimmed from the note title and body text.
 - Note titles cannot match other note titles within the category it will be placed, ignoring letter case.
+- Note titles and body text must contain non-whitespace characters.
+
+### Editing a note
+
+- Extraneous whitespace will be trimmed from the note title and body text.
+- Note titles cannot match other note titles within the category it will be placed, ignoring letter case.
+- Note titles and body text must contain non-whitespace characters.
+- Note title, body text, or selected category must be different than the source content in order to save the note.
+- If the note ID in the URL isn't found (e.g. `#/note/edit/3`), the console displays an error, such as `ERROR: Quick Note not found (id: 3)`.
+
+### Deleting a note
+
+- Attemping to delete a note will activate a dialog to confirm the action.
 
 ### Selecting a category
 
@@ -67,6 +57,14 @@ In the navigation list, categories are sorted alphabetically, ignoring letter ca
 - Keying `Enter` when focused on a category will select that category.
 - Keying `Enter` when focused on the *New Category Name* input field will attempt to create that category.
 
-### Deleting a note or category
+### Renaming a category
 
-- Attemping to delete a note or category will activate a dialog to confirm the action.
+- A category can't be named *Unspecified*, ignoring letter case.
+- A category can't be named the same as another category.
+- A category name must contain non-whitespace characters.
+- A category cannot be renamed to the same name as itself. Different letter casing is permitted.
+- If the category ID in the URL isn't found (e.g. `#/category/edit/2`), the console displays an error, such as `ERROR: Category not found (id: 2)`.
+
+### Deleting a category
+
+- Attemping to delete a category will activate a dialog to confirm the action.
