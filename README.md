@@ -73,5 +73,3 @@ gulp
 ### Deleting a category
 
 - Attemping to delete a category will activate a dialog to confirm the action.
-
-Kamol was here
